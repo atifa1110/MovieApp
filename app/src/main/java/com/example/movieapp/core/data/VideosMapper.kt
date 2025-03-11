@@ -4,8 +4,8 @@ import com.example.movieapp.core.database.model.detailmovie.VideoEntity
 import com.example.movieapp.core.database.model.detailmovie.VideosEntity
 import com.example.movieapp.core.domain.VideoModel
 import com.example.movieapp.core.domain.VideosModel
-import com.example.movieapp.core.network.response.NetworkVideo
-import com.example.movieapp.core.network.response.NetworkVideos
+import com.example.movieapp.core.network.response.movies.NetworkVideo
+import com.example.movieapp.core.network.response.movies.NetworkVideos
 
 fun NetworkVideos.asVideoEntity() = VideosEntity(
     results = results.map(NetworkVideo::asVideoEntity)

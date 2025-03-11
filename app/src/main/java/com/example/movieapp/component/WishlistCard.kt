@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -158,11 +160,14 @@ fun ShimmerEffect(
 fun WishlistCard(
     mediaType : String,
     movie : WishList?,
+    onClick : (Int) -> Unit,
     deleteFromWishlist : (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clickable {
+            onClick(movie?.id?:0)
+        },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Soft
@@ -262,12 +267,14 @@ fun WishlistCard(
                 }
             }
             Box(modifier = Modifier.padding(bottom = 8.dp)) {
-                IconButton(onClick = { deleteFromWishlist(movie?.id?:0) }
+                IconButton(
+                    modifier = Modifier.testTag("DeleteWishlist_${movie?.id?:0}"),
+                    onClick = { deleteFromWishlist(movie?.id?:0) }
                 ) {
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favorite",
+                        contentDescription = "Delete ${movie?.id?:0}",
                         tint = if (movie?.isWishListed == true) Color.Red else Grey
                     )
                 }
@@ -285,6 +292,7 @@ fun WishlistCardPreview(
             WishlistCard(
                 mediaType = "Movie",
                 movie = getFakeWishListed(),
+                onClick ={},
                 deleteFromWishlist = {}
             )
         }

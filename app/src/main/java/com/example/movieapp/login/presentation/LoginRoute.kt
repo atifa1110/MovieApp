@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -174,7 +175,7 @@ fun LoginContent(
         Text(
             text = stringResource(R.string.forgot_password),
             color = BlueAccent,
-            modifier = Modifier
+            modifier = Modifier.testTag("ForgotButton")
                 .align(Alignment.End)
                 .clickable { onForgotPasswordClick() }
         )

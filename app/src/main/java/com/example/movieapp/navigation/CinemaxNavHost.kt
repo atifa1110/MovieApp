@@ -1,5 +1,6 @@
 package com.example.movieapp.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHost
@@ -96,6 +97,7 @@ fun CinemaxNavHost(
             },
             onNavigateToList = {
                 navController.navigate(ListDestination.createNavigationRoute(it))
+                Log.d("NavigationListDestination", "Navigating to: ${ListDestination.createNavigationRoute(it)}")
             },
             onNavigateToWishlist = {
                 navController.navigate(WishlistDestination.route)

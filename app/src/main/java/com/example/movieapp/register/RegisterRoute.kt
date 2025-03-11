@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.movieapp.R
 import com.example.movieapp.component.AuthCinemaxButton
 import com.example.movieapp.component.AuthTopAppBar
+import com.example.movieapp.component.CinemaxEmailField
 import com.example.movieapp.component.CinemaxPasswordField
 import com.example.movieapp.component.CinemaxTextField
 import com.example.movieapp.component.LoaderScreen
@@ -175,7 +176,7 @@ fun RegisterContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CinemaxTextField(
+        CinemaxEmailField(
             text = email,
             textError = emailError,
             labelName = R.string.email_address,

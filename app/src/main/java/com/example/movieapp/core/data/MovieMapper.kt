@@ -1,7 +1,6 @@
 package com.example.movieapp.core.data
 
 import com.example.movieapp.core.database.model.movie.MovieEntity
-import com.example.movieapp.core.database.model.movie.MovieWithGenreNames
 import com.example.movieapp.core.database.model.movie.MovieWithGenres
 import com.example.movieapp.core.database.util.MediaType
 import com.example.movieapp.core.domain.MovieModel
@@ -10,7 +9,7 @@ import com.example.movieapp.core.network.asMediaType
 import com.example.movieapp.core.network.getDateCustomFormat
 import com.example.movieapp.core.network.getRating
 import com.example.movieapp.core.network.getTitle
-import com.example.movieapp.core.network.response.MovieNetwork
+import com.example.movieapp.core.network.response.movies.MovieNetwork
 
 internal fun MovieWithGenres.asMovieModel() = MovieModel(
     id = movie.networkId,

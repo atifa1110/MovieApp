@@ -19,6 +19,7 @@ internal object Constants {
 
     internal object Fields {
         internal const val ID = "id"
+        internal const val AIR_DATE = "air_date"
         internal const val MOVIE_ID = "movieId"
         internal const val GENRE_ID = "genreId"
         internal const val NETWORK_ID = "network_id"
@@ -35,9 +36,11 @@ internal object Constants {
         internal const val PRODUCTION_CODE = "production_code"
         internal const val STATUS = "status"
         internal const val SEASONS = "seasons"
+        internal const val SEASON_NUMBER = "season_number"
         internal const val TYPE = "type"
         internal const val TAGLINE = "tagline"
         internal const val HOMEPAGE = "homepage"
+        internal const val EPISODE_COUNT = "episode_count"
         internal const val EPISODE_RUN_TIME = "episode_run_time"
         internal const val PAGE = "page"
         internal const val RESULTS = "results"

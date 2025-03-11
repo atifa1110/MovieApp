@@ -1,6 +1,6 @@
 package com.example.movieapp.core.database.source
 
-import com.example.movieapp.core.database.dao.SearchDao
+import com.example.movieapp.core.database.dao.search.SearchDao
 import com.example.movieapp.core.database.model.search.SearchEntity
 import javax.inject.Inject
 

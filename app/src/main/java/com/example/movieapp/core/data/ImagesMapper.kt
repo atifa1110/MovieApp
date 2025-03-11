@@ -5,8 +5,8 @@ import com.example.movieapp.core.database.model.detailmovie.ImagesEntity
 import com.example.movieapp.core.domain.ImageModel
 import com.example.movieapp.core.domain.ImagesModel
 import com.example.movieapp.core.network.asImageURL
-import com.example.movieapp.core.network.response.NetworkImage
-import com.example.movieapp.core.network.response.NetworkImages
+import com.example.movieapp.core.network.response.movies.NetworkImage
+import com.example.movieapp.core.network.response.movies.NetworkImages
 
 
 fun NetworkImages.asImagesEntity() = ImagesEntity(
@@ -22,8 +22,8 @@ private fun NetworkImage.asImageEntity() = ImageEntity(
 )
 
 fun ImagesEntity.asImagesModel() = ImagesModel(
-    backdrops = backdrops.map(com.example.movieapp.core.database.model.detailmovie.ImageEntity::asImageModel),
-    posters = posters.map(com.example.movieapp.core.database.model.detailmovie.ImageEntity::asImageModel)
+    backdrops = backdrops.map(ImageEntity::asImageModel),
+    posters = posters.map(ImageEntity::asImageModel)
 )
 
 private fun ImageEntity.asImageModel() = ImageModel(

@@ -18,6 +18,7 @@ fun NavGraphBuilder.homeGraph(
     HomeRoute(
         onSeeFavoriteClick = onNavigateToWishlist,
         onSeeAllClick = { onNavigateToListDestination(it) },
-        onMovieClick = { onNavigateToDetailsDestination ( MediaType.Details.Movie(it))}
+        onMovieClick = { onNavigateToDetailsDestination ( MediaType.Details.Movie(it))},
+        onTvShowClick = { onNavigateToDetailsDestination (MediaType.Details.TvShow(it))}
     )
 }

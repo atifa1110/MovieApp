@@ -4,12 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.core.model.MediaType
 import com.example.movieapp.core.domain.MovieModel
+import com.example.movieapp.core.domain.TvShowModel
 import com.example.movieapp.core.model.Movie
+import com.example.movieapp.core.model.TvShow
 import com.example.movieapp.core.network.response.CinemaxResponse
 import com.example.movieapp.core.ui.EventHandler
 import com.example.movieapp.core.ui.asGenreNames
 import com.example.movieapp.core.ui.asMediaTypeModel
 import com.example.movieapp.core.ui.asMovie
+import com.example.movieapp.core.ui.asTvShow
 import com.example.movieapp.search.usecase.GetMovieUseCase
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +28,7 @@ data class HomeUiState(
     val genres : List<String> = emptyList(),
     val loadGenre : Boolean = false,
     val movies: Map<MediaType.Movie, List<Movie>> = emptyMap(),
+    val tvShows: Map<MediaType.TvShow, List<TvShow>> = emptyMap(),
     val loadStates: Map<MediaType, Boolean> = emptyMap(),
     val errorMessage: String? = null,
     val isOfflineModeAvailable: Boolean = false,
@@ -37,7 +41,8 @@ internal val HomeUiState.isLoading: Boolean get() = loadStates.values.any { it }
 class HomeViewModel @Inject constructor(
     private val getUserId: GetUserId,
     private val getMovieUseCase: GetMovieUseCase,
-    private val getGenreMovieUseCase: GetGenreMovieUseCase
+    private val getGenreMovieUseCase: GetGenreMovieUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase
 ) : ViewModel(), EventHandler<HomeEvent> {
 
     private val _uiState = MutableStateFlow(HomeUiState(userId = getUserId()))
@@ -60,6 +65,12 @@ class HomeViewModel @Inject constructor(
             MediaType.Movie.Popular
         )
         movieMediaTypes.forEach(::loadMovies)
+
+        val tvShowMediaTypes = listOf(
+            MediaType.TvShow.Popular,
+            MediaType.TvShow.NowPlaying
+        )
+        tvShowMediaTypes.forEach(::loadTvShow)
 
         loadGenre()
     }
@@ -121,6 +132,33 @@ class HomeViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             movies = it.movies + (mediaType to data.map(MovieModel::asMovie)),
+                            loadStates = it.loadStates + (mediaType to false)
+                        )
+                    }
+                }
+                is CinemaxResponse.Failure -> {
+                    val error = response.error
+                    handleFailure(error = error , mediaType = mediaType)
+                }
+            }
+        }
+    }
+
+    private fun loadTvShow(mediaType: MediaType.TvShow) = viewModelScope.launch {
+        getTvShowUseCase.invoke(mediaType.asMediaTypeModel()).collect{ response ->
+            when(response){
+                is CinemaxResponse.Loading -> {
+                    _uiState.update {
+                        it.copy(
+                            loadStates = it.loadStates + (mediaType to true)
+                        )
+                    }
+                }
+                is CinemaxResponse.Success -> {
+                    val data = response.value
+                    _uiState.update {
+                        it.copy(
+                            tvShows = it.tvShows + (mediaType to data.map(TvShowModel::asTvShow)),
                             loadStates = it.loadStates + (mediaType to false)
                         )
                     }

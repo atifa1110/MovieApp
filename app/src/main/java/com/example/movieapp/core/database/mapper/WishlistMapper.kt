@@ -7,6 +7,7 @@ import com.example.movieapp.core.data.asMediaTypeModel
 import com.example.movieapp.core.database.model.wishlist.WishlistEntity
 import com.example.movieapp.core.database.util.MediaType
 import com.example.movieapp.core.domain.MovieDetailModel
+import com.example.movieapp.core.domain.TvShowDetailModel
 import com.example.movieapp.core.domain.WishlistModel
 
 
@@ -28,4 +29,14 @@ internal fun MediaType.Wishlist.asWishlistEntity(movie: MovieDetailModel) = Wish
     rating = movie.rating,
     posterPath = movie.posterPath.toString(),
     isWishListed = movie.isWishListed
+)
+
+internal fun MediaType.Wishlist.asWishlistEntity(tvShow : TvShowDetailModel) = WishlistEntity(
+    mediaType = this,
+    networkId = tvShow.id,
+    title = tvShow.name,
+    genreEntities = tvShow.genres.asGenreEntity(),
+    rating = tvShow.rating,
+    posterPath = tvShow.posterPath.toString(),
+    isWishListed = tvShow.isWishListed
 )

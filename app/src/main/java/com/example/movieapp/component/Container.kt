@@ -19,6 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,11 +30,13 @@ import androidx.paging.compose.itemKey
 import com.example.movieapp.R
 import com.example.movieapp.core.model.Genre
 import com.example.movieapp.core.model.Movie
+import com.example.movieapp.core.model.TvShow
 import com.example.movieapp.ui.theme.BlueAccent
 import com.example.movieapp.ui.theme.White
 
 @Composable
 private fun <T> ContainerContent(
+    text : String,
     items: List<T>,
     isLoading : Boolean,
     itemContent: @Composable LazyItemScope.(T) -> Unit,
@@ -42,7 +45,9 @@ private fun <T> ContainerContent(
     shouldShowPlaceholder: Boolean = items.isEmpty() && isLoading
 ) {
     LazyRow(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag("ContainerLazyRow$text"),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
@@ -63,6 +68,7 @@ fun GenreListContainer(
     modifier: Modifier = Modifier
 ){
     ContainerContent(
+        text = "Genre",
         modifier = modifier,
         items = genres,
         isLoading = isLoading,
@@ -82,11 +88,29 @@ fun MovieVerticalListContainer(
     modifier: Modifier = Modifier
 ) {
     ContainerContent(
+        text = "Movie",
         modifier = modifier,
         items = movies,
         isLoading = isLoading,
         itemContent = { movie -> MovieVerticalCard(movie = movie, onClick = onClick) },
         placeholderContent = {  MovieShimmerVerticalCard() },
+    )
+}
+
+@Composable
+fun TvShowVerticalListContainer(
+    tvShow: List<TvShow>,
+    isLoading: Boolean,
+    onClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ContainerContent(
+        text = "Tv",
+        modifier = modifier,
+        items = tvShow,
+        isLoading = isLoading,
+        itemContent = { tv -> TvShowVerticalCard(tvShow = tv, onClick = onClick) },
+        placeholderContent = {  TvShowShimmerVerticalCard() },
     )
 }
 
@@ -114,7 +138,7 @@ fun MoviesUpcomingPagingContainer(
     },
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().testTag("LazyListContainer"),
         contentPadding = PaddingValues(8.dp)
     ) {
         items(count = movies.itemCount, key = movies.itemKey { it.id ?: "" }) { item ->
@@ -163,7 +187,7 @@ fun MoviesPagingContainer(
     }
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().testTag("SearchLazyColumn"),
         contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
         items(count = movies.itemCount, key = movies.itemKey { it.id ?: "" }) { item ->
@@ -188,22 +212,99 @@ fun MoviesPagingContainer(
 }
 
 @Composable
-fun MoviesAndTvContainer(
+fun TvShowPagingContainer(
+    tvs: LazyPagingItems<TvShow>,
+    onClick: (Int) -> Unit,
+    onHistory: (TvShow) -> Unit ,
+    modifier: Modifier = Modifier,
+    emptyContent: @Composable () -> Unit = {
+        ErrorMovie(
+            errorImage = R.drawable.no_result,
+            errorTitle = R.string.cannot_find_search,
+            errorDescription = R.string.find_your_movie
+        )
+    },
+    loadingContent: @Composable () -> Unit = {
+        LoaderScreen(modifier = Modifier.fillMaxSize())
+    },
+    errorContent: @Composable () -> Unit = {
+        ErrorMovie(
+            errorImage = R.drawable.no_result,
+            errorTitle = R.string.cannot_find_search,
+            errorDescription = R.string.find_your_movie
+        )
+    }
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 8.dp)
+    ) {
+        items(count = tvs.itemCount, key = tvs.itemKey { it.id ?: "" }) { item ->
+            val tv = tvs[item]
+            TvShowHorizontalCard(tvShow = tv, onClick = onClick, onHistory = onHistory)
+        }
+    }
+
+    when (tvs.loadState.refresh){
+        is LoadState.Loading -> {
+            loadingContent()
+        }
+        is LoadState.Error -> {
+            errorContent()
+        }
+        else -> {
+            if(tvs.itemSnapshotList.isEmpty()){
+                emptyContent()
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MoviesContainer(
     @StringRes titleResourceId: Int,
     onSeeAllClick: () -> Unit,
     movies: List<Movie>,
     isLoading : Boolean,
-    onMovieClick: (Int) -> Unit,
+    onCardClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth().testTag("MovieContainer")) {
         ContainerTitleWithButton(
             titleResourceId = titleResourceId,
             onSeeAllClick = onSeeAllClick
         )
-        MovieVerticalListContainer(movies = movies, isLoading = isLoading,onClick = onMovieClick)
+        MovieVerticalListContainer(
+            movies = movies,
+            isLoading = isLoading,
+            onClick = onCardClick
+        )
     }
 }
+
+@Composable
+fun TvContainer(
+    @StringRes titleResourceId: Int,
+    onSeeAllClick: () -> Unit,
+    tvShow: List<TvShow>,
+    isLoading : Boolean,
+    onCardClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.fillMaxWidth().testTag("TvContainer")) {
+        ContainerTitleWithButton(
+            titleResourceId = titleResourceId,
+            onSeeAllClick = onSeeAllClick
+        )
+        TvShowVerticalListContainer(
+            tvShow = tvShow,
+            isLoading = isLoading,
+            onClick = onCardClick
+        )
+    }
+}
+
 
 @Composable
 fun MoviesContainer(
@@ -235,6 +336,7 @@ fun ContainerTitleWithButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            modifier = Modifier.testTag(stringResource(id = titleResourceId)),
             text = stringResource(id = titleResourceId),
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,

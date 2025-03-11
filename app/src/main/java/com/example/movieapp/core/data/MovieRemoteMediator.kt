@@ -1,5 +1,6 @@
 package com.example.movieapp.core.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -67,11 +68,14 @@ class MovieRemoteMediator(
                                 async {
                                     when (val runtime = networkDataSource.getDetailMovie(movieNetwork.id ?: 0)) {
                                         is CinemaxResponse.Success -> movieNetwork.asMovieEntity(mediaType,runtime.value.runtime)
-                                        is CinemaxResponse.Failure -> TODO()
-                                        CinemaxResponse.Loading -> TODO()
+                                        is CinemaxResponse.Failure -> {
+                                            Log.e("MovieRemoteMediator", "Failed to fetch runtime for movie ID: ${movieNetwork.id}, Error: ${runtime.error}")
+                                            null
+                                        }
+                                        CinemaxResponse.Loading -> null
                                     }
                                 }
-                            }?.awaitAll()
+                            }?.awaitAll()?.filterNotNull()
 
 
                         val endOfPaginationReached = movies?.isEmpty() ?: false
@@ -102,7 +106,11 @@ class MovieRemoteMediator(
                     MediatorResult.Error(Exception(response.error))
                 }
 
-                CinemaxResponse.Loading -> TODO()
+                is CinemaxResponse.Loading -> {
+                    MediatorResult.Success(endOfPaginationReached = false)
+                }
+                // 🔥 Tambahkan else untuk menangani semua kasus
+                else -> MediatorResult.Error(Exception("Unhandled response type: $response"))
             }
 
         } catch (exception: IOException) {

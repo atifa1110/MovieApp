@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.movieapp.core.model.MediaType
-import com.example.movieapp.detail.DetailRoute
+import com.example.movieapp.detail.presentation.DetailRoute
 
 object DetailsDestination : CinemaxNavigationDestination {
     override val route = "details_route"

@@ -2,9 +2,7 @@ package com.example.movieapp.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.movieapp.core.model.MediaType
-import com.example.movieapp.search.presentation.SearchRoute
-import com.example.movieapp.wishlist.WishlistRoute
+import com.example.movieapp.wishlist.presentation.WishlistRoute
 
 object WishlistDestination : CinemaxNavigationDestination {
     override val route = "wishlist_route"

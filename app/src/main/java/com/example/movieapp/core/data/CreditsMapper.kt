@@ -1,5 +1,6 @@
 package com.example.movieapp.core.data
 
+
 import com.example.movieapp.core.database.model.detailmovie.CastEntity
 import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
 import com.example.movieapp.core.database.model.detailmovie.CrewEntity
@@ -7,9 +8,9 @@ import com.example.movieapp.core.domain.CastModel
 import com.example.movieapp.core.domain.CreditsModel
 import com.example.movieapp.core.domain.CrewModel
 import com.example.movieapp.core.network.asImageURL
-import com.example.movieapp.core.network.response.NetworkCast
-import com.example.movieapp.core.network.response.NetworkCredits
-import com.example.movieapp.core.network.response.NetworkCrew
+import com.example.movieapp.core.network.response.movies.NetworkCast
+import com.example.movieapp.core.network.response.movies.NetworkCredits
+import com.example.movieapp.core.network.response.movies.NetworkCrew
 
 fun NetworkCredits.asCredits() = CreditsEntity(
     cast = cast.map(NetworkCast::asCast),
@@ -46,7 +47,7 @@ fun NetworkCrew.asCrew() = CrewEntity(
 )
 
 fun CreditsEntity.asCreditsModel() = CreditsModel(
-    cast = cast.map(com.example.movieapp.core.database.model.detailmovie.CastEntity::asCastModel),
+    cast = cast.map(CastEntity::asCastModel),
     crew = crew.map(CrewEntity::asCrewModel)
 )
 

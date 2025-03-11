@@ -1,20 +1,18 @@
 package com.example.movieapp.core.database.source
 
 import android.util.Log
-import androidx.compose.runtime.movableContentOf
 import androidx.paging.PagingSource
-import com.example.movieapp.core.database.dao.GenreDao
+import com.example.movieapp.core.database.dao.genre.GenreDao
 import com.example.movieapp.core.database.util.MediaType
-import com.example.movieapp.core.database.dao.MovieDao
-import com.example.movieapp.core.database.dao.MovieRemoteKeyDao
-import com.example.movieapp.core.database.model.movie.Genre
+import com.example.movieapp.core.database.dao.movie.MovieDao
+import com.example.movieapp.core.database.dao.movie.MovieRemoteKeyDao
 import com.example.movieapp.core.database.model.movie.GenreEntity
 import com.example.movieapp.core.database.model.movie.MovieEntity
 import com.example.movieapp.core.database.model.movie.MovieGenreCrossRef
 import com.example.movieapp.core.database.model.movie.MovieRemoteKeyEntity
-import com.example.movieapp.core.database.model.movie.MovieWithGenreNames
 import com.example.movieapp.core.database.model.movie.MovieWithGenres
 import com.example.movieapp.core.database.util.DatabaseTransactionProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -29,20 +27,17 @@ class MovieDatabaseSource @Inject constructor(
     private val genreDao: GenreDao,
     private val transactionProvider: DatabaseTransactionProvider
 ) {
-    suspend fun insertCrossRef(movies: List<MovieGenreCrossRef>){
-        movieDao.insertCrossRef(movies)
-    }
-
     fun getGenreMovie() : Flow<List<GenreEntity>> = genreDao.getGenres()
 
-    suspend fun insertGenre(genres : List<GenreEntity>
+    suspend fun insertGenre(
+        genres : List<GenreEntity>
     ) = transactionProvider.runWithTransaction {
         genreDao.deleteAll()
         genreDao.insertAll(genres)
     }
-    suspend fun getGenreById(genreId:Int) = genreDao.getGenreNameById(genreId)
 
     //Fetch movies with genre names
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun getMoviesWithGenres(mediaType: MediaType.Movie, pageSize: Int): Flow<List<MovieWithGenres>> {
         return movieDao.getByMediaType(mediaType,pageSize).flatMapLatest { movies ->
             Log.d("Debug","Movie Map : ${movies.size}")

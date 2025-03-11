@@ -38,7 +38,10 @@ fun BottomNavHost(
         searchGraph(
             onNavigateToDetailsDestination = {
                 onNavigateToDetail(it)
-            }
+            },
+            onNavigateToListDestination = {
+                onNavigateToList(it)
+            },
         )
         downloadGraph()
         profileGraph(

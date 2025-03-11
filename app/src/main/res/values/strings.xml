@@ -33,12 +33,15 @@
     <string name="open_notification">Open Notification</string>
     <string name="type_search">Type title, categories, years, etc</string>
     <string name="empty_data">Search data is empty</string>
-    <string name="recommendation">Recommendation for you</string>
+    <string name="recommendation_movie">Movie Recommendation for you</string>
+    <string name="recommendation_tv">Tv Recommendation for you</string>
     <string name="see_all">See All</string>
     <string name="open_favorite">Open Favorite</string>
     <string name="cannot_find_search">we are sorry, we can \nnot find the movie :(</string>
     <string name="find_your_movie">Find your movie by Type title, \ncategories, years, etc</string>
     <string name="cannot_find_movie">There is No Movie Yet!</string>
+    <string name="coming_soon">This feature is coming soon!</string>
+    <string name="found_out_soon">You will found out soon!</string>
     <string name="actor">Actors</string>
     <string name="movie">Movies</string>
 
@@ -79,9 +82,9 @@
     <string name="upcoming_movies">Upcoming Movie</string>
     <string name="login">Login</string>
     <string name="back">Back</string>
-    <string name="welcome_back_please_enter_your_details">Welcome back! Please enter \nyour details.</string>
+    <string name="welcome_back_please_enter_your_details">Welcome back ! Please enter \nyour details.</string>
     <string name="email_address">Email Address</string>
-    <string name="hi_tiffany">Hi, Tiffany</string>
+    <string name="hi_tiffany">Hi, Welcome</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="sign_up">Sign Up</string>
@@ -145,19 +148,21 @@
     <string name="language">Language</string>
     <string name="lets_stream_your_favorite_movie">Let’s stream your favorite movie</string>
     <string name="search">Search</string>
-    <string name="most_popular">Most Popular</string>
+    <string name="most_popular_movie">Most Popular Movie</string>
+    <string name="most_popular_tv">Most Popular Tv</string>
     <string name="story_line">Story Line</string>
     <string name="less">Less</string>
     <string name="more">More</string>
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
     <string name="gallery">Gallery</string>
-    <string name="now_playing">Now Playing</string>
+    <string name="now_playing_movie">Now Playing Movie</string>
+    <string name="now_playing_tv">Now Playing Tv</string>
     <string name="top_rated">Top Rated</string>
     <string name="discover">Discover</string>
     <string name="trending">Trending</string>
-    <string name="add_movie_wishlist">Success Add to WishList</string>
-    <string name="remove_movie_wishlist">Success Remove from WishList</string>
+    <string name="add_wishlist">Success Add to WishList</string>
+    <string name="remove_wishlist">Success Remove from WishList</string>
     <string name="search_history">Search History</string>
     <string name="wishlist">Wishlist</string>
     <string name="success_delete_from_wishlist">Success Delete from Wishlist</string>
@@ -167,4 +172,9 @@
     <string name="choose_picture">Choose Picture</string>
     <string name="camera">Camera</string>
     <string name="icon_profile">Icon Profile</string>
+    <string name="seasons">Seasons</string>
+    <string name="upcoming_tv_shows">Upcoming Tv Show</string>
+    <string name="top_rated_tv">Top Rated Tv</string>
+    <string name="discover_tv">Discover Tv</string>
+    <string name="trending_tv">Trending Tv Show</string>
 </resources>

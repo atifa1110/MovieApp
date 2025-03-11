@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,7 +44,7 @@ fun CinemaxTextField(
         onValueChange = { onTextChange(it) },
         label = { Text(stringResource(labelName), color = White) },
         singleLine = true,
-        modifier = Modifier
+        modifier = Modifier.testTag("TextInput")
             .fillMaxWidth(),
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Grey,
@@ -67,7 +68,50 @@ fun CinemaxTextField(
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth().padding(start = 8.dp,top = 4.dp)
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 8.dp,top = 4.dp).testTag("TextError")
+        )
+    }
+}
+
+@Composable
+fun CinemaxEmailField(
+    text : String,
+    textError : String? = null,
+    @StringRes labelName : Int,
+    onTextChange : (String) -> Unit,
+) {
+    OutlinedTextField(
+        value = text,
+        onValueChange = { onTextChange(it) },
+        label = { Text(stringResource(labelName), color = White) },
+        singleLine = true,
+        modifier = Modifier.testTag("EmailInput")
+            .fillMaxWidth(),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Grey,
+            focusedLabelColor = White,
+            unfocusedTextColor = Grey,
+            unfocusedLabelColor = White,
+            errorTextColor = Grey,
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            focusedBorderColor = Soft,
+            unfocusedBorderColor = Soft,
+        ),
+        shape = RoundedCornerShape(24.dp),
+        isError = textError!=null
+    )
+
+    if(textError!=null){
+        Text(
+            text = "* $textError",
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Start,
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 8.dp,top = 4.dp).testTag("EmailError")
         )
     }
 }
@@ -94,7 +138,7 @@ fun CinemaxPasswordField(
                 Icon(imageVector = image, contentDescription = null, tint = Grey)
             }
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().testTag("PasswordInput"),
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Grey,
             focusedLabelColor = White,
@@ -117,7 +161,7 @@ fun CinemaxPasswordField(
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Start,
-            modifier = Modifier
+            modifier = Modifier.testTag("PasswordError")
                 .fillMaxWidth()
                 .padding(start = 8.dp, top = 4.dp)
         )

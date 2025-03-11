@@ -1,0 +1,32 @@
+package com.example.movieapp.core.model
+
+data class TvShowDetails (
+    val id: Int,
+    val name: String,
+    val adult: Boolean,
+    val backdropPath: String?,
+    val episodeRunTime: List<Int>,
+    val firstAirDate: String?,
+    val genres: List<Genre>,
+    val seasons : List<Season>,
+    val homepage: String,
+    val inProduction: Boolean,
+    val languages: List<String>,
+    val lastAirDate: String?,
+    val numberOfEpisodes: Int,
+    val numberOfSeasons: Int,
+    val originCountry: List<String>,
+    val originalLanguage: String,
+    val originalName: String,
+    val overview: String,
+    val popularity: Double,
+    val posterPath: String?,
+    val status: String,
+    val tagline: String,
+    val type: String,
+    val voteAverage: Double,
+    val voteCount: Int,
+    val credits: Credits,
+    val rating : Double,
+    val isWishListed: Boolean
+)

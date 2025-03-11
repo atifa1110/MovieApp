@@ -28,7 +28,7 @@ fun getDateCustomFormat(releaseDate: String?, firstAirDate: String?): String {
 
         // Format the date to the desired string
         if (date != null) {
-            "On " + outputFormat.format(date)
+            outputFormat.format(date)
         } else {
             "No Release Date"
         }
@@ -68,16 +68,16 @@ fun getTitle(originalTitle : String?, originalName: String?):String{
     return if(originalTitle.isNullOrEmpty()) originalName.toString() else originalTitle.toString()
 }
 
-fun getPhoto(posterUrl : String?, profilePath: String?):String{
-    return if(posterUrl.isNullOrEmpty()) profilePath.toString() else posterUrl.toString()
-}
-
 fun capitalizeFirstLetter(input: String?): String {
     return if (input?.isNotEmpty() == true) {
         input.substring(0, 1).uppercase() + input.substring(1).lowercase()
     } else {
         input?:""
     }
+}
+
+fun calculatePercentage(vote: Double): Int {
+    return ((vote / 10.0) * 100).toInt()
 }
 
 fun getGenreName(genre: List<Genre>?): Int {
@@ -93,6 +93,7 @@ fun String.asImageURL() = buildImageUrl(path = this)
 fun buildImageUrl(path: String) = Constants.IMAGE_URL + path
 
 fun Double.getRating() = calculateStarRating(voteAverage = this)
+fun Double.getPercentageRating() = calculatePercentage(this)
 fun String.getFormatReleaseDate() = getDateCustomFormat(releaseDate = this, firstAirDate = null)
 fun String.getYearReleaseDate() = getYearFromFormattedDate(dateString = this)
 

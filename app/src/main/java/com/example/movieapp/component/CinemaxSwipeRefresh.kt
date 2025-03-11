@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.example.movieapp.ui.theme.BlueAccent
 import com.example.movieapp.ui.theme.Dark
@@ -34,14 +35,15 @@ fun CinemaxSwipeRefresh(
     val state = rememberPullRefreshState(refreshing = isRefreshing,
         onRefresh = onRefresh
     )
-    Box(modifier =  modifier.fillMaxSize().background(Dark)
+    Box(modifier =  modifier.fillMaxSize()
+        .background(Dark).testTag("SwipeRefresh") // ✅ Add testTag for swipe refresh
         .pullRefresh(state = state)) {
         content()
 
         PullRefreshIndicator(
             modifier = Modifier
                 .padding(indicatorPadding)
-                .align(indicatorAlignment),
+                .align(indicatorAlignment).testTag("RefreshIndicator"), // ✅ Add testTag for loading indicator,
             refreshing = isRefreshing,
             state = state,
             backgroundColor = backgroundColor,

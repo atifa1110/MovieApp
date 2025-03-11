@@ -2,8 +2,8 @@ package com.example.movieapp.core.network.api
 
 import com.example.movieapp.core.network.Constants
 import com.example.movieapp.core.network.response.GenreResponse
-import com.example.movieapp.core.network.response.MovieDetailNetwork
-import com.example.movieapp.core.network.response.MovieResponse
+import com.example.movieapp.core.network.response.movies.MovieDetailNetwork
+import com.example.movieapp.core.network.response.movies.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,12 +18,12 @@ interface MovieApiService {
 
     @GET(Constants.Path.SEARCH_MULTI)
     suspend fun getSearchAll(
-        @Query(Constants.Fields.PAGE) page: Int = Constants.DEFAULT_PAGE,
         @Query(Constants.Fields.QUERY) query: String = "",
+        @Query(Constants.Fields.PAGE) page: Int = Constants.DEFAULT_PAGE,
         @Query("include_adult") adult: Boolean = true,
     ): Response<MovieResponse>
 
-    @GET(Constants.Path.TRENDING_ALL)
+    @GET(Constants.Path.TRENDING_MOVIE)
     suspend fun getTrendingMovie(
         @Query(Constants.Fields.PAGE) page: Int = Constants.DEFAULT_PAGE
     ): Response<MovieResponse>

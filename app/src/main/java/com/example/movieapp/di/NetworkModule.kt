@@ -5,6 +5,7 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.movieapp.core.network.Constants
 import com.example.movieapp.core.network.api.MovieApiService
+import com.example.movieapp.core.network.api.TvShowApiService
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -96,6 +97,12 @@ object NetworkModule {
     @Provides
     fun provideMovieService(retrofit: Retrofit): MovieApiService {
         return retrofit.create(MovieApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTvShowService(retrofit: Retrofit): TvShowApiService {
+        return retrofit.create(TvShowApiService::class.java)
     }
 
 }

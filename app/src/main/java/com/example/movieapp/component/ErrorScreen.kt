@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -79,8 +80,6 @@ fun ErrorScreen(
                 style = MaterialTheme.typography.labelLarge
             )
         }
-
-
     }
 }
 
@@ -90,13 +89,14 @@ fun ErrorMovie(
     @StringRes errorTitle: Int,
     @StringRes errorDescription: Int,
 ){
-    Column(modifier = Modifier.fillMaxSize().background(Dark),
+    Column(modifier = Modifier.fillMaxSize().background(Dark)
+        .testTag("ErrorScreen"),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Image(painter = painterResource(id = errorImage),
             contentDescription = "No Result")
-        Text(modifier = Modifier.padding(top = 16.dp),
+        Text(modifier = Modifier.padding(top = 16.dp).testTag(stringResource(id = errorTitle)),
             text = stringResource(id = errorTitle),
             color= WhiteGrey,textAlign = TextAlign.Center)
         Text(modifier = Modifier.padding(16.dp),

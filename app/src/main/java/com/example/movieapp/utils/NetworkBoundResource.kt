@@ -14,9 +14,9 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline shouldFetch: (ResultType) -> Boolean = { true }
 ): Flow<CinemaxResponse<ResultType>> = flow {
     emit(CinemaxResponse.Loading)
-    val data = query().first()
+    //val data = query().first()
 
-    val flow = if (shouldFetch(data)) {
+    val flow = if (shouldFetch(query().first())) { //get first and pass it.
         emit(CinemaxResponse.Loading)
 
         when (val response = fetch()) {

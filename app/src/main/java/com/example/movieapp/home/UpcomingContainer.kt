@@ -197,7 +197,7 @@ private fun UpcomingMovieItem(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = releaseDate.toString(),
+                        text = "On {$releaseDate}",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = WhiteGrey

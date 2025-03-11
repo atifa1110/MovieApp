@@ -3,10 +3,23 @@ package com.example.movieapp.core.database.converter
 import androidx.room.TypeConverter
 import com.example.movieapp.core.database.model.movie.Genre
 import com.example.movieapp.core.database.model.movie.GenreEntity
+import com.example.movieapp.core.database.model.tv.SeasonEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 internal class ListConverter {
+
+    @TypeConverter
+    fun fromGenreStringList(list: List<String>?): String? {
+        return if (list == null) null else Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toGenreStringList(list: String?): List<String>? {
+        if (list == null) return null
+        val listType = object : TypeToken<List<String>>() {}.type
+        return Gson().fromJson(list, listType)
+    }
 
     @TypeConverter
     fun fromGenreIntList(genreEntities: List<Int>?): String? {
@@ -42,5 +55,17 @@ internal class ListConverter {
         if (genresString == null) return null
         val listType = object : TypeToken<List<GenreEntity>>() {}.type
         return Gson().fromJson(genresString, listType)
+    }
+
+    @TypeConverter
+    fun fromSeasonEntityList(seasons: List<SeasonEntity>?): String? {
+        return if (seasons == null) null else Gson().toJson(seasons)
+    }
+
+    @TypeConverter
+    fun toSeasonEntityList(season: String?): List<SeasonEntity>? {
+        if (season == null) return null
+        val listType = object : TypeToken<List<SeasonEntity>>() {}.type
+        return Gson().fromJson(season, listType)
     }
 }

@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,7 +58,7 @@ fun MovieHorizontalSearchCard(
     onClick: (Int) -> Unit,
     onDelete: (Int) -> Unit
 ) {
-    Box(modifier = Modifier
+    Box(modifier = Modifier.testTag("MovieHorizontalCard${movie?.id}")
         .fillMaxWidth()
         .background(Dark)
         .padding(16.dp)
@@ -215,6 +216,7 @@ fun MovieHorizontalSearchCard(
                 }
             }
             IconButton(
+                modifier = Modifier.testTag("DeleteHistoryButton"),
                 onClick = { onDelete(movie?.id?:0) }
             ) {
                 Icon(

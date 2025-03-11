@@ -1,6 +1,8 @@
 package com.example.movieapp.search.presentation
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -8,7 +10,9 @@ import androidx.paging.cachedIn
 import com.example.movieapp.core.model.MediaType
 import com.example.movieapp.core.domain.MovieModel
 import com.example.movieapp.core.domain.SearchModel
+import com.example.movieapp.core.domain.TvShowModel
 import com.example.movieapp.core.model.Movie
+import com.example.movieapp.core.model.TvShow
 import com.example.movieapp.core.network.response.CinemaxResponse
 import com.example.movieapp.core.ui.EventHandler
 import com.example.movieapp.core.ui.asGenreNames
@@ -16,11 +20,12 @@ import com.example.movieapp.core.ui.asMediaTypeModel
 import com.example.movieapp.core.ui.pagingMap
 import com.example.movieapp.core.ui.asMovie
 import com.example.movieapp.core.ui.asSearchModel
+import com.example.movieapp.core.ui.asTvShow
 import com.example.movieapp.home.GetGenreMovieUseCase
+import com.example.movieapp.home.GetTvShowUseCase
 import com.example.movieapp.search.usecase.AddMovieToSearchHistoryUseCase
 import com.example.movieapp.search.usecase.DeleteMovieFromSearchHistoryUseCase
 import com.example.movieapp.search.usecase.GetMovieUseCase
-import com.example.movieapp.search.usecase.GetMovieWithGenreUseCase
 import com.example.movieapp.search.usecase.GetSearchHistoryUseCase
 import com.example.movieapp.search.usecase.SearchMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,17 +44,23 @@ data class SearchUiState(
     val query: String = "",
     val isSearching: Boolean = false,
     val searchMovies: Flow<PagingData<Movie>> = emptyFlow(),
-    val trendingUiState: TrendingUiState = TrendingUiState(),
+    val trendingMovieUiState: TrendingMovieUiState = TrendingMovieUiState(),
+    val trendingTvUiState: TrendingTvUiState = TrendingTvUiState(),
     val historyUiState: HistoryUiState = HistoryUiState(),
     val genreUiState: GenreUiState = GenreUiState(),
     val error: Throwable? = null,
     val isOfflineModeAvailable: Boolean = false,
-    val userMessage : String? = null,
+    val userMessage: MutableState<String?> = mutableStateOf(null),
 )
 
-data class TrendingUiState(
+data class TrendingTvUiState(
+    val trendingTv : List<TvShow> = emptyList(),
+    val isTrendingTv: Boolean = false,
+)
+
+data class TrendingMovieUiState(
     val trendingMovies : List<Movie> = emptyList(),
-    val isTrending: Boolean = false,
+    val isTrendingMovie: Boolean = false,
 )
 
 data class HistoryUiState(
@@ -70,10 +81,10 @@ class SearchViewModel @Inject constructor(
     private val searchMovieUseCase: SearchMovieUseCase,
     private val addMovieToSearchHistoryUseCase: AddMovieToSearchHistoryUseCase,
     private val deleteMovieFromSearchHistoryUseCase: DeleteMovieFromSearchHistoryUseCase,
-    private val getGenreMovieUseCase: GetGenreMovieUseCase,
+    //private val getGenreMovieUseCase: GetGenreMovieUseCase,
     private val getSearchHistoryUseCase: GetSearchHistoryUseCase,
     private val getMovieUseCase: GetMovieUseCase,
-    private val getMovieGenreUseCase: GetMovieWithGenreUseCase
+    private val getTvShowUseCase: GetTvShowUseCase
 ) : ViewModel(), EventHandler<SearchEvent> {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -87,6 +98,7 @@ class SearchViewModel @Inject constructor(
             SearchEvent.Refresh -> onRefresh()
             SearchEvent.Retry -> onRetry()
             SearchEvent.ClearError -> onClearError()
+            else -> {}
         }
     }
 
@@ -96,7 +108,8 @@ class SearchViewModel @Inject constructor(
 
     private fun loadContent() {
         loadMovies(MediaType.Movie.Trending)
-        loadGenre()
+        loadTv(MediaType.TvShow.Trending)
+        //loadGenre()
         loadSearchHistory()
     }
 
@@ -143,17 +156,17 @@ class SearchViewModel @Inject constructor(
     }
 
     fun snackBarMessageShown() {
-        _uiState.value = _uiState.value.copy(userMessage = null)
-
+        _uiState.update { currentState ->
+            currentState.userMessage.value = null
+            currentState
+        }
     }
 
     fun addSearchHistory(movie : Movie) {
         viewModelScope.launch {
             addMovieToSearchHistoryUseCase.invoke(movie.asSearchModel())
             loadSearchHistory()
-            _uiState.update {
-                it.copy(userMessage = "Success Add to History")
-            }
+            _uiState.value.userMessage.value = "Success Add to History"
         }
     }
 
@@ -161,9 +174,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             deleteMovieFromSearchHistoryUseCase.invoke(id)
             loadSearchHistory()
-            _uiState.update {
-                it.copy(userMessage = "Success Delete From History")
-            }
+            _uiState.value.userMessage.value = "Success Delete From History"
         }
     }
 
@@ -197,13 +208,42 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+//    fun onCategorySelected(category: String) {
+//        _uiState.update { it.copy(genreUiState = GenreUiState(selectedGenre = category)) }
+//    }
+//
+//    private fun loadGenre() = viewModelScope.launch {
+//        getGenreMovieUseCase.invoke().collect{ response ->
+//            when(response){
+//                is CinemaxResponse.Loading -> {
+//                    _uiState.update {
+//                        it.copy(genreUiState = GenreUiState(isGenres = true))
+//                    }
+//                }
+//                is CinemaxResponse.Success -> {
+//                    val result = response.value.asGenreNames()
+//                    _uiState.update {
+//                        it.copy(genreUiState = GenreUiState(isGenres = false, genres = result))
+//                    }
+//                }
+//                is CinemaxResponse.Failure -> {
+//                    val errorResult = response.error
+//                    _uiState.update {
+//                        it.copy(genreUiState = GenreUiState(isGenres = false))
+//                    }
+//                }
+//            }
+//
+//        }
+//    }
+
     private fun loadMovies(mediaType: MediaType.Movie) = viewModelScope.launch {
         getMovieUseCase(mediaType.asMediaTypeModel()).collect { response ->
             when(response){
                 is CinemaxResponse.Loading -> {
                     _uiState.update {
                         it.copy(
-                            trendingUiState = TrendingUiState(isTrending = true)
+                            trendingMovieUiState = TrendingMovieUiState(isTrendingMovie = true)
                         )
                     }
                 }
@@ -212,14 +252,17 @@ class SearchViewModel @Inject constructor(
                     Log.d("Debug", "Trending : ${trending.size}")
                     _uiState.update {
                         it.copy(
-                            trendingUiState = TrendingUiState(isTrending = false, trendingMovies = trending)
+                            trendingMovieUiState = TrendingMovieUiState(
+                                isTrendingMovie = false,
+                                trendingMovies = trending
+                            )
                         )
                     }
                 }
                 is CinemaxResponse.Failure -> {
                     _uiState.update {
                         it.copy(
-                            trendingUiState = TrendingUiState(isTrending = false)
+                            trendingMovieUiState = TrendingMovieUiState(isTrendingMovie = false)
                         )
                     }
                 }
@@ -227,33 +270,36 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    // Function to update the selected category
-    fun onCategorySelected(category: String) {
-        _uiState.update { it.copy(genreUiState = GenreUiState(selectedGenre = category)) }
-    }
-
-    private fun loadGenre() = viewModelScope.launch {
-        getGenreMovieUseCase.invoke().collect{ response ->
+    private fun loadTv(mediaType: MediaType.TvShow) = viewModelScope.launch {
+        getTvShowUseCase(mediaType.asMediaTypeModel()).collect { response ->
             when(response){
                 is CinemaxResponse.Loading -> {
                     _uiState.update {
-                        it.copy(genreUiState = GenreUiState(isGenres = true))
+                        it.copy(
+                            trendingTvUiState = TrendingTvUiState(isTrendingTv = true)
+                        )
                     }
                 }
                 is CinemaxResponse.Success -> {
-                    val result = response.value.asGenreNames()
+                    val trending = response.value.map(TvShowModel::asTvShow)
+                    Log.d("Debug", "Trending : ${trending.size}")
                     _uiState.update {
-                        it.copy(genreUiState = GenreUiState(isGenres = false, genres = result))
+                        it.copy(
+                            trendingTvUiState = TrendingTvUiState(
+                                isTrendingTv = false,
+                                trendingTv = trending
+                            )
+                        )
                     }
                 }
                 is CinemaxResponse.Failure -> {
-                    val errorResult = response.error
                     _uiState.update {
-                        it.copy(genreUiState = GenreUiState(isGenres = false))
+                        it.copy(
+                            trendingTvUiState = TrendingTvUiState(isTrendingTv = false)
+                        )
                     }
                 }
             }
-
         }
     }
 

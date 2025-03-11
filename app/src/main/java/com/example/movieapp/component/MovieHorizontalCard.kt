@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +57,7 @@ fun MovieHorizontalCard(
     onClick: (Int) -> Unit,
     onHistory: (Movie) -> Unit
 ) {
-    Box(modifier = Modifier
+    Box(modifier = Modifier.testTag("MovieCard${movie?.id}")
         .fillMaxWidth()
         .background(Dark)
         .padding(16.dp)

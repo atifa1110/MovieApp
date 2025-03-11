@@ -4,11 +4,11 @@ import android.util.Log
 import com.example.movieapp.core.network.Constants
 import com.example.movieapp.core.network.NetworkMediaType
 import com.example.movieapp.core.network.api.MovieApiService
-import com.example.movieapp.core.network.response.MovieResponse
+import com.example.movieapp.core.network.response.movies.MovieResponse
 import com.example.movieapp.core.network.response.CinemaxResponse
 import com.example.movieapp.core.network.response.ErrorResponse
 import com.example.movieapp.core.network.response.GenreResponse
-import com.example.movieapp.core.network.response.MovieDetailNetwork
+import com.example.movieapp.core.network.response.movies.MovieDetailNetwork
 import com.google.gson.Gson
 import javax.inject.Inject
 
@@ -35,7 +35,7 @@ class MovieNetworkDataSource @Inject constructor(
                     CinemaxResponse.failure(error.statusMessage)
                 }
             } else {
-                CinemaxResponse.failure("Network request failed with code: ${response.code()} and message: ${response.message()}")
+                CinemaxResponse.failure(error.statusMessage)
             }
 
         } catch (e: Exception) {
@@ -70,7 +70,7 @@ class MovieNetworkDataSource @Inject constructor(
                     CinemaxResponse.failure(error.statusMessage)
                 }
             } else {
-                CinemaxResponse.failure("Network request failed with code: ${response.code()} and message: ${response.message()}")
+                CinemaxResponse.failure(error.statusMessage)
             }
 
         } catch (e: Exception) {
@@ -83,7 +83,7 @@ class MovieNetworkDataSource @Inject constructor(
         page: Int = Constants.DEFAULT_PAGE
     ): CinemaxResponse<MovieResponse> {
         return try{
-            val response = movieService.getSearchAll(page,query)
+            val response = movieService.getSearchAll(query, page)
             val body = response.body()
             val errorResponse = response.errorBody()?.string()
             val error = errorResponse?.let {
@@ -98,7 +98,7 @@ class MovieNetworkDataSource @Inject constructor(
                     CinemaxResponse.failure(error.statusMessage)
                 }
             } else {
-                CinemaxResponse.failure("Network request failed with code: ${response.code()} and message: ${response.message()}")
+                CinemaxResponse.failure(error.statusMessage)
             }
         }catch (e: Exception){
             CinemaxResponse.failure(e.localizedMessage?:"Unexpected Error!")
@@ -126,7 +126,7 @@ class MovieNetworkDataSource @Inject constructor(
                     CinemaxResponse.failure(error.statusMessage)
                 }
             } else {
-                CinemaxResponse.failure("Network request failed with code: ${response.code()} and message: ${response.message()}")
+                CinemaxResponse.failure(error.statusMessage)
             }
         }catch (e: Exception){
             CinemaxResponse.failure(e.localizedMessage?:"Unexpected Error!")

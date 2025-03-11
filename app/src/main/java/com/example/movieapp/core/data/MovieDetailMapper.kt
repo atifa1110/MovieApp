@@ -1,38 +1,41 @@
 package com.example.movieapp.core.data
 
+import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailmovie.ImagesEntity
 import com.example.movieapp.core.database.model.detailmovie.MovieDetailsEntity
+import com.example.movieapp.core.database.model.detailmovie.VideosEntity
 import com.example.movieapp.core.domain.MovieDetailModel
 import com.example.movieapp.core.network.asImageURL
 import com.example.movieapp.core.network.getFormatReleaseDate
 import com.example.movieapp.core.network.getRating
-import com.example.movieapp.core.network.response.MovieDetailNetwork
+import com.example.movieapp.core.network.response.movies.MovieDetailNetwork
 
 fun MovieDetailNetwork.asMovieDetailsEntity() = MovieDetailsEntity(
     id = id,
     adult = adult,
     backdropPath = backdropPath,
-    budget = budget,
-    genreEntities = genres.asGenres(),
+    budget = budget?:0,
+    genreEntities = genres?.asGenres()?: listOf(),
     homepage = homepage,
     imdbId = imdbId,
-    originalLanguage = originalLanguage,
-    originalTitle = originalTitle,
-    overview = overview,
-    popularity = popularity,
+    originalLanguage = originalLanguage?:"",
+    originalTitle = originalTitle?:"",
+    overview = overview?:"",
+    popularity = popularity?:0.0,
     posterPath = posterPath?.asImageURL(),
     releaseDate = releaseDate?.getFormatReleaseDate(),
-    revenue = revenue,
+    revenue = revenue?:0,
     runtime = runtime,
-    status = status,
+    status = status?:"",
     tagline = tagline,
-    title = title,
-    video = video,
-    voteAverage = voteAverage,
-    voteCount = voteCount,
-    rating =  voteAverage.getRating(),
-    credits = credits.asCredits(),
-    videos = videos.asVideoEntity(),
-    images = images.asImagesEntity()
+    title = title?:"",
+    video = video?:false,
+    voteAverage = voteAverage?:0.0,
+    voteCount = voteCount?:0,
+    rating =  voteAverage?.getRating()?:0.0,
+    credits = credits?.asCredits()?: CreditsEntity(listOf(), listOf()),
+    videos = videos?.asVideoEntity()?: VideosEntity(listOf()),
+    images = images?.asImagesEntity()?: ImagesEntity(listOf(), listOf())
 )
 
 fun MovieDetailsEntity.asMovieDetailsModel(isWishListed: Boolean) = MovieDetailModel(

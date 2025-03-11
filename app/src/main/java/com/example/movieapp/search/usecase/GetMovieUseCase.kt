@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetMovieUseCase @Inject constructor(
-    private val searchRepository: MovieRepository
+    private val movieRepository: MovieRepository
 ) {
     operator fun invoke(mediaTypeModel: MediaTypeModel.Movie): Flow<CinemaxResponse<List<MovieModel>>> {
-        return searchRepository.getByMediaType(mediaTypeModel)
+        return movieRepository.getByMediaType(mediaTypeModel)
     }
 }

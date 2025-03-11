@@ -12,6 +12,10 @@ import com.example.movieapp.core.network.repository.SearchHistoryRepository
 import com.example.movieapp.core.network.repository.SearchHistoryRepositoryImpl
 import com.example.movieapp.core.network.repository.StorageRepository
 import com.example.movieapp.core.network.repository.StorageRepositoryImpl
+import com.example.movieapp.core.network.repository.TvShowDetailRepository
+import com.example.movieapp.core.network.repository.TvShowDetailRepositoryImpl
+import com.example.movieapp.core.network.repository.TvShowRepository
+import com.example.movieapp.core.network.repository.TvShowRepositoryImpl
 import com.example.movieapp.core.network.repository.WishListRepository
 import com.example.movieapp.core.network.repository.WishListRepositoryImpl
 import dagger.Binds
@@ -26,7 +30,11 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindSearchRepository(repository: MovieRepositoryImpl): MovieRepository
+    abstract fun bindMovieRepository(repository: MovieRepositoryImpl): MovieRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindTvShowRepository(repository: TvShowRepositoryImpl): TvShowRepository
 
     @Singleton
     @Binds
@@ -35,6 +43,10 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindMovieDetailRepository(repository: MovieDetailRepositoryImpl): MovieDetailRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindTvShowDetailRepository(repository: TvShowDetailRepositoryImpl): TvShowDetailRepository
 
     @Singleton
     @Binds

@@ -4,6 +4,7 @@ import android.net.Uri
 import com.example.movieapp.core.network.datasource.AuthNetworkDataSource
 import com.example.movieapp.core.network.response.CinemaxResponse
 import com.example.movieapp.login.User
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
@@ -54,14 +55,14 @@ class StorageRepositoryImpl @Inject constructor(
         awaitClose { task.cancel() }
     }
 
-    private fun removeProfileImage(onComplete: (CinemaxResponse<String>) -> Unit) {
+    fun removeProfileImage(onComplete: (CinemaxResponse<String>) -> Unit) : Task<Void> {
         val ref = authNetworkDataSource.removeProfileDatabase()
 
         val updates = hashMapOf<String, Any>(
             "photo" to ""
         )
-
-        ref.update(updates)
+        // i add return cause the function return task<void>
+        return ref.update(updates)
             .addOnSuccessListener {
                 onComplete(CinemaxResponse.Success("Image URL Removed Successfully from Firestore"))
             }

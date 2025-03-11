@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -78,10 +79,9 @@ fun HomeAppBar(
     user : FirebaseUser?,
     onSeeFavoriteClick : () -> Unit
 ){
-    Row(
-        modifier = Modifier
+    Row(modifier = Modifier.testTag("HomeTopAppBar")
             .fillMaxWidth()
-            .padding(16.dp).clickable { onSeeFavoriteClick() },
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         Box (modifier = Modifier
@@ -119,13 +119,13 @@ fun HomeAppBar(
             )
         }
 
-        Box(modifier = Modifier
-            .size(32.dp)
+        Box(modifier = Modifier.clickable { onSeeFavoriteClick()}
+            .size(32.dp).testTag("WishlistButton")
             .clip(RoundedCornerShape(12.dp))
             .background(Soft),
             contentAlignment = Alignment.Center
         ) {
-            androidx.compose.material.Icon(
+            Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = Icons.Default.Favorite,
                 contentDescription = "Wishlist", tint = Color.Red
@@ -181,6 +181,7 @@ fun TopAppBar(
     onBackButton :  () -> Unit
 ) {
     CenterAlignedTopAppBar(
+        modifier = Modifier.testTag("TopAppBar"),
         title = {
             Text(
                 text = stringResource(id = title),
@@ -255,7 +256,7 @@ fun SearchTextField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(
-            modifier = modifier.width(textFieldWidth).weight(1f),
+            modifier = modifier.width(textFieldWidth).weight(1f).testTag("SearchTextField"),
             placeholder = {
                 Text(
                     text = stringResource(id = R.string.type_search),
@@ -303,7 +304,7 @@ fun SearchTextField(
             exit = scaleOut() + fadeOut()
         ) {
             Text(
-                modifier = Modifier.clickable {
+                modifier = Modifier.testTag(stringResource(id = R.string.cancel)).clickable {
                     onQueryChange("")
                     isExpanded = !isExpanded
                 },
@@ -327,6 +328,7 @@ fun DetailTopAppBar(
     addToWishlist: () -> Unit
 ) {
     CenterAlignedTopAppBar(
+        modifier = Modifier.testTag("DetailTopAppBar"),
         title = {
             Text(
                 text = title,
@@ -358,14 +360,14 @@ fun DetailTopAppBar(
         },
         actions = {
             Row (Modifier.padding(end = 8.dp,top=16.dp,bottom = 16.dp)) {
-                IconButton(modifier = Modifier
+                IconButton(modifier = Modifier.testTag("WishlistButton")
                     .clip(CircleShape)
                     .background(Soft),
                     onClick = addToWishlist
                 ) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favorite",
+                        contentDescription = "Wishlist Button",
                         tint = if(isWishlist) Color.Red else Grey,
                     )
                 }

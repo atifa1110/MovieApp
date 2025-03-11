@@ -37,10 +37,10 @@ class SearchPagingSource(
                                         when(val runtime = networkDataSource.getDetailMovie(movieNetwork.id ?: 0)) {
                                             is CinemaxResponse.Success -> movieNetwork.asMovieModel(runtime.value.runtime)
                                             is CinemaxResponse.Failure -> movieNetwork.asMovieModel()
-                                            CinemaxResponse.Loading -> TODO()
+                                            CinemaxResponse.Loading -> null
                                         }
                                     }
-                                }?.awaitAll()
+                                }?.awaitAll()?.filterNotNull()
 
                         val endOfPaginationReached = data?.isEmpty() ?: false
 

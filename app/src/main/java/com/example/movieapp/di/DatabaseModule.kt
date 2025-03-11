@@ -2,12 +2,15 @@ package com.example.movieapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.movieapp.core.database.dao.GenreDao
-import com.example.movieapp.core.database.dao.MovieDao
-import com.example.movieapp.core.database.dao.MovieDetailsDao
-import com.example.movieapp.core.database.dao.MovieRemoteKeyDao
-import com.example.movieapp.core.database.dao.SearchDao
-import com.example.movieapp.core.database.dao.WishlistDao
+import com.example.movieapp.core.database.dao.genre.GenreDao
+import com.example.movieapp.core.database.dao.movie.MovieDao
+import com.example.movieapp.core.database.dao.movie.MovieDetailsDao
+import com.example.movieapp.core.database.dao.movie.MovieRemoteKeyDao
+import com.example.movieapp.core.database.dao.search.SearchDao
+import com.example.movieapp.core.database.dao.tv.TvShowDetailsDao
+import com.example.movieapp.core.database.dao.wishlist.WishlistDao
+import com.example.movieapp.core.database.dao.tv.TvShowDao
+import com.example.movieapp.core.database.dao.tv.TvShowRemoteKeyDao
 import com.example.movieapp.core.database.database.MovieDatabase
 import dagger.Module
 import dagger.Provides
@@ -47,4 +50,12 @@ object DatabaseModule {
     @Provides
     fun provideGenreDao(database: MovieDatabase): GenreDao = database.genreDao()
 
+    @Provides
+    fun provideTvShowDao(database: MovieDatabase): TvShowDao = database.tvShowDao()
+
+    @Provides
+    fun provideTvShowRemoteKeyDao(database: MovieDatabase): TvShowRemoteKeyDao = database.tvShowRemoteKeyDao()
+
+    @Provides
+    fun provideTvShowDetailDao(database: MovieDatabase): TvShowDetailsDao = database.tvShowDetailsDao()
 }

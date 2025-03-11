@@ -11,9 +11,12 @@ object SearchDestination : CinemaxNavigationDestination {
 }
 
 fun NavGraphBuilder.searchGraph(
+    onNavigateToListDestination : (MediaType.Common) -> Unit,
     onNavigateToDetailsDestination: (MediaType.Details) -> Unit,
 ) = composable(route = SearchDestination.route) {
     SearchRoute(
-        onMovieClick = { onNavigateToDetailsDestination(MediaType.Details.Movie(it)) }
+        onTvShowClick = { onNavigateToDetailsDestination(MediaType.Details.TvShow(it)) },
+        onMovieClick = { onNavigateToDetailsDestination(MediaType.Details.Movie(it)) },
+        onSeeAllClick = { onNavigateToListDestination(it) }
     )
 }

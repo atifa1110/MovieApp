@@ -39,9 +39,11 @@ class AuthRepositoryImpl @Inject constructor(
                 // Emit failure state if not successful
                 trySend(CinemaxResponse.Failure("Authentication failed, Check email and password")).isSuccess
             }
+            close()
         }.addOnFailureListener { exception ->
             // Emit failure on exception
             trySend(CinemaxResponse.Failure("Authentication failed: ${exception.message}")).isSuccess
+            close()
         }
 
         // Provide a cancellation mechanism
@@ -80,13 +82,16 @@ class AuthRepositoryImpl @Inject constructor(
                                     is CinemaxResponse.Loading -> trySend(CinemaxResponse.Loading)
                                     is CinemaxResponse.Success -> trySend(CinemaxResponse.Success(state.value))
                                 }
+                                close()
                             }
                         }else{
                             trySend(CinemaxResponse.Failure(profileTask.exception?.message ?: "Failed to update profile"))
+                            close()
                         }
                     }
                 }else{
                     trySend(CinemaxResponse.Failure("Registration failed: Unable to retrieve FirebaseUser."))
+                    close()
                 }
             }else{
                 try {
@@ -100,9 +105,11 @@ class AuthRepositoryImpl @Inject constructor(
                 } catch (e: Exception) {
                     trySend(CinemaxResponse.Failure(e.message?:"Unexpected Error"))
                 }
+                close()
             }
         }.addOnFailureListener{
             trySend(CinemaxResponse.Failure(it.localizedMessage?:"Unexpected Error"))
+            close()
         }
 
         // Provide a cancellation mechanism
@@ -146,8 +153,10 @@ class AuthRepositoryImpl @Inject constructor(
             }else{
                 trySend(CinemaxResponse.Failure("No user data found"))
             }
+            close()
         }.addOnFailureListener {
             trySend(CinemaxResponse.Failure("Error fetching user data"))
+            close()
         }
 
         // Provide a cancellation mechanism
@@ -161,8 +170,10 @@ class AuthRepositoryImpl @Inject constructor(
         val userUid = authNetworkDataSource.getUserUid()?.uid ?: ""
         val task = authNetworkDataSource.saveProfile(userUid, user).addOnSuccessListener { task->
             trySend(CinemaxResponse.Success("Data is Save"))
+            close()
         }.addOnFailureListener {
             trySend(CinemaxResponse.Failure("Data Failed To Save"))
+            close()
         }
         // Provide a cancellation mechanism
         awaitClose { task.isCanceled }

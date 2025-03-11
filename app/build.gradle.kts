@@ -32,6 +32,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -70,6 +71,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("androidx.test.ext:junit-ktx:1.2.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -88,6 +90,7 @@ dependencies {
 
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    testImplementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //youtube
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
@@ -163,5 +166,33 @@ dependencies {
     //Chucker
     debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
-    
+
+    //Roboelectric
+    testImplementation("android.arch.core:core-testing:1.1.1")
+    androidTestImplementation("android.arch.core:core-testing:1.1.1")
+
+    // Testing dependencies
+    testImplementation ("io.mockk:mockk:1.13.4") // Mocking library
+    testImplementation ("androidx.room:room-testing:2.5.0") //
+
+    testImplementation(kotlin("test"))
+
+    //Mockito
+    testImplementation("org.robolectric:robolectric:4.9")
+    testImplementation("androidx.test:core:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    testImplementation("org.mockito:mockito-core:5.4.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    testImplementation("androidx.paging:paging-testing:3.2.0")
+    androidTestImplementation("androidx.paging:paging-testing:3.2.0")
+    testImplementation ("androidx.paging:paging-common-ktx:3.2.0")
+
 }
