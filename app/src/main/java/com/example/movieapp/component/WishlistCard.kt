@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -51,11 +50,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.movieapp.R
-import com.example.movieapp.core.model.MovieDetails
 import com.example.movieapp.core.model.WishList
 import com.example.movieapp.core.network.getGenreName
-import com.example.movieapp.home.getFakeDetailMovie
-import com.example.movieapp.home.getFakeWishListed
+import com.example.movieapp.home.presentation.getFakeWishListed
 import com.example.movieapp.ui.theme.Grey
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.Orange

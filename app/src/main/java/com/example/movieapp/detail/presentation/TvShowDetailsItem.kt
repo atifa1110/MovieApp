@@ -46,14 +46,12 @@ import com.example.movieapp.component.DetailTopAppBar
 import com.example.movieapp.component.SeasonCard
 import com.example.movieapp.core.model.Credits
 import com.example.movieapp.core.model.Genre
-import com.example.movieapp.core.model.Images
 import com.example.movieapp.core.model.MediaType
 import com.example.movieapp.core.model.Season
 import com.example.movieapp.core.model.TvShowDetails
 import com.example.movieapp.core.network.getGenreName
 import com.example.movieapp.core.network.getYearReleaseDate
-import com.example.movieapp.home.getFakeDetailMovie
-import com.example.movieapp.home.getFakeDetailTvShow
+import com.example.movieapp.home.presentation.getFakeDetailTvShow
 import com.example.movieapp.ui.theme.BlueAccent
 import com.example.movieapp.ui.theme.Dark
 import com.example.movieapp.ui.theme.MovieAppTheme

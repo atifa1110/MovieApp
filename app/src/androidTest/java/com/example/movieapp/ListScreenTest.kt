@@ -1,7 +1,6 @@
 package com.example.movieapp
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -9,10 +8,10 @@ import androidx.compose.ui.test.performClick
 import androidx.paging.PagingData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.movieapp.core.model.MediaType
-import com.example.movieapp.home.getFakeMovie
-import com.example.movieapp.home.getFakeTvShow
-import com.example.movieapp.list.ListScreen
-import com.example.movieapp.list.ListUiState
+import com.example.movieapp.home.presentation.getFakeMovie
+import com.example.movieapp.home.presentation.getFakeTvShow
+import com.example.movieapp.list.presentation.ListScreen
+import com.example.movieapp.list.presentation.ListUiState
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test

@@ -3,7 +3,7 @@ package com.example.movieapp.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.movieapp.core.model.MediaType
-import com.example.movieapp.home.HomeRoute
+import com.example.movieapp.home.presentation.HomeRoute
 
 object HomeDestination : CinemaxNavigationDestination {
     override val route = "home_route"

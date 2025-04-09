@@ -97,7 +97,6 @@ fun Double.getPercentageRating() = calculatePercentage(this)
 fun String.getFormatReleaseDate() = getDateCustomFormat(releaseDate = this, firstAirDate = null)
 fun String.getYearReleaseDate() = getYearFromFormattedDate(dateString = this)
 
-fun String.asVideoURL(site: String) = buildVideoUrl(key = this, site = site)
 fun buildVideoUrl(key: String, site :String) : String {
     val url = if(site == "YouTube"){
         Constants.VIDEO_URL + key

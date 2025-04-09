@@ -40,7 +40,7 @@ import coil.request.ImageRequest
 import com.example.movieapp.R
 import com.example.movieapp.core.model.Movie
 import com.example.movieapp.core.network.getGenreName
-import com.example.movieapp.home.getFakeMovie
+import com.example.movieapp.home.presentation.getFakeMovie
 import com.example.movieapp.ui.theme.Dark
 import com.example.movieapp.ui.theme.Grey
 import com.example.movieapp.ui.theme.MovieAppTheme

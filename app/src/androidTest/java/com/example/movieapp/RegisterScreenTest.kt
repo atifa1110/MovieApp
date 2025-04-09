@@ -1,11 +1,11 @@
 package com.example.movieapp
 
+import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -13,8 +13,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.movieapp.register.RegisterScreen
-import com.example.movieapp.register.RegisterUiState
+import com.example.movieapp.register.presentation.RegisterScreen
+import com.example.movieapp.register.presentation.RegisterUiState
 import com.example.movieapp.ui.theme.MovieAppTheme
 import org.junit.Rule
 import org.junit.Test
@@ -45,7 +45,7 @@ class RegisterScreenTest {
                     onEmailChange = { newEmail ->
                         uiState.value = uiState.value.copy(
                             email = newEmail,
-                            emailError = if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
+                            emailError = if (!Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
                                 "Invalid email format"
                             else if(newEmail.isBlank()) "Email cannot be empty" else null
                         )
@@ -95,7 +95,7 @@ class RegisterScreenTest {
                     onEmailChange = { newEmail ->
                         uiState.value = uiState.value.copy(
                             email = newEmail,
-                            emailError = if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
+                            emailError = if (!Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
                                 "Invalid email format"
                             else if(newEmail.isBlank()) "Email cannot be empty" else null
                         )
@@ -202,7 +202,7 @@ class RegisterScreenTest {
                     onEmailChange = { newEmail ->
                         uiState.value = uiState.value.copy(
                             email = newEmail,
-                            emailError = if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
+                            emailError = if (!Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
                                 "Invalid email format"
                             else if(newEmail.isBlank()) "Email cannot be empty" else null
                         )
@@ -259,7 +259,7 @@ class RegisterScreenTest {
                     onEmailChange = { newEmail ->
                         uiState.value = uiState.value.copy(
                             email = newEmail,
-                            emailError = if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
+                            emailError = if (!Patterns.EMAIL_ADDRESS.matcher(newEmail).matches())
                                 "Invalid email format"
                             else if(newEmail.isBlank()) "Email cannot be empty" else null
                         )

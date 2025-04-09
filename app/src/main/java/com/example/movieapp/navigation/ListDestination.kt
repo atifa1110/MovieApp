@@ -1,13 +1,12 @@
 package com.example.movieapp.navigation
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.movieapp.core.model.MediaType
-import com.example.movieapp.list.ListRoute
+import com.example.movieapp.list.presentation.ListRoute
 
 object ListDestination : CinemaxNavigationDestination {
     override val route = "list_route"

@@ -1,5 +1,6 @@
 package com.example.movieapp.network.repository
 
+import com.example.movieapp.MainCoroutineRule
 import com.example.movieapp.core.network.datasource.AuthNetworkDataSource
 import com.example.movieapp.core.network.repository.AuthRepositoryImpl
 import com.example.movieapp.core.network.response.CinemaxResponse
@@ -8,14 +9,24 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -29,23 +40,35 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.doAnswer
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
+@ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 class AuthRepositoryImplTest {
+
+    @get:Rule
+    val coroutineRule = MainCoroutineRule()
 
     private lateinit var authRepository: AuthRepositoryImpl
     private lateinit var authNetworkDataSource: AuthNetworkDataSource
     private val testDispatcher = StandardTestDispatcher()
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseUser: FirebaseUser
 
     @Before
     fun setUp() {
+        MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
         authNetworkDataSource = mock(AuthNetworkDataSource::class.java)
+        firebaseAuth = mock(FirebaseAuth::class.java)
+        firebaseUser = mock(FirebaseUser::class.java)
         authRepository = AuthRepositoryImpl(authNetworkDataSource)
     }
 
@@ -139,45 +162,145 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `registerWithEmailAndPassword should emit success when registration succeeds`() = runTest {
-        // Mock input values
-        val email = "newuser@example.com"
+    fun `registerFirebaseUser should emit success when registration is successful`() = runTest {
+        // Arrange
+        val email = "test@example.com"
         val password = "password123"
-        val user = User(name = "Test User") // 🔥 Ensure `user` is mocked
-
-        // Mock dependencies
-        val mockTask = mock<Task<AuthResult>>()
+        val user = User("Test User")
+        val mockTaskResult = mock<AuthResult>()
         val mockFirebaseUser = mock<FirebaseUser>()
-        val mockProfileUpdateTask = mock<Task<Void>>()
+        val mockTask = mock<Task<AuthResult>>()
+        val mockProfileTask = mock<Task<Void>>()
 
-        // 🔥 Ensure `authNetworkDataSource` is a mock
         whenever(authNetworkDataSource.registerWithEmailAndPassword(email, password)).thenReturn(mockTask)
-
-        // Mock behavior for successful registration
         whenever(mockTask.isSuccessful).thenReturn(true)
-        whenever(mockTask.result).thenReturn(mock())
-        whenever(mockTask.result?.user).thenReturn(mockFirebaseUser)
+        whenever(mockTask.result).thenReturn(mockTaskResult)
+        whenever(mockTaskResult.user).thenReturn(mockFirebaseUser)
         whenever(mockFirebaseUser.uid).thenReturn("user123")
-        whenever(mockFirebaseUser.updateProfile(any())).thenReturn(mockProfileUpdateTask)
-        whenever(mockProfileUpdateTask.isSuccessful).thenReturn(true)
+        whenever(mockFirebaseUser.updateProfile(any())).thenReturn(mockProfileTask)
+        whenever(mockProfileTask.isSuccessful).thenReturn(true)
 
-        // Mock updateUserInfo function
-        whenever(authRepository.updateUserInfo(any(), any())).thenAnswer { invocation ->
-            val callback = invocation.getArgument<(CinemaxResponse<String>) -> Unit>(1)
-            callback(CinemaxResponse.Success("User registered successfully!"))
-            Unit // Ensure it returns the correct type
+        // Mock addOnCompleteListener for mockTask
+        whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnCompleteListener<AuthResult>
+            listener.onComplete(mockTask)
+            mockTask
         }
 
+        // Mock addOnCompleteListener for mockProfileTask
+        whenever(mockProfileTask.addOnCompleteListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnCompleteListener<Void>
+            listener.onComplete(mockProfileTask)
+            mockProfileTask
+        }
 
-        // Collect results
-        val result = authRepository.registerWithEmailAndPassword(email, password, user).toList()
+        // Act
+        val result = authRepository.registerFirebaseUser(email, password, user).toList()
 
-        advanceUntilIdle() // Ensure all coroutines finish
+        advanceUntilIdle()
 
-        // Assertions
-        assert(result[0] is CinemaxResponse.Loading) // First emission must be Loading
-        assert(result[1] is CinemaxResponse.Success) // Second emission must be Success
-        assertEquals("User registered successfully!", (result[1] as CinemaxResponse.Success).value)
+        // Assert
+        assert(result[0] is CinemaxResponse.Loading)
+        assert(result[1] is CinemaxResponse.Success)
+        assertEquals("user123", (result[1] as CinemaxResponse.Success).value.userId)
+    }
+
+    @Test
+    fun `registerFirebaseUser should emit failure when registration fails`() = runBlocking {
+        // Arrange
+        val email = "test@example.com"
+        val password = "password123"
+        val user = User("Test User")
+        val mockTask = mock<Task<AuthResult>>()
+        val errorMessage = "Registration failed"
+
+        whenever(authNetworkDataSource.registerWithEmailAndPassword(email, password)).thenReturn(mockTask)
+        whenever(mockTask.isSuccessful).thenReturn(false)
+        whenever(mockTask.exception).thenReturn(FirebaseAuthException("code", errorMessage))
+
+        // Mock addOnCompleteListener and ensure it returns mockTask
+        whenever(mockTask.addOnCompleteListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnCompleteListener<AuthResult>
+            listener.onComplete(mockTask)
+            mockTask // Return the mockTask
+        }
+
+        // Mock addOnFailureListener and ensure it returns mockTask
+        whenever(mockTask.addOnFailureListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnFailureListener
+            listener.onFailure(FirebaseAuthException("code", errorMessage))
+            mockTask // Return the mockTask
+        }
+
+        // Act
+        val result = authRepository.registerFirebaseUser(email, password, user).toList()
+
+        // Assert
+        assert(result[0] is CinemaxResponse.Loading)
+        assert(result[1] is CinemaxResponse.Failure)
+        assertEquals(errorMessage, (result[1] as CinemaxResponse.Failure).error)
+    }
+
+    @Test
+    fun `saveUserData should emit success when save operation is successful`() = runBlocking {
+        // Arrange
+
+        val mockUser = User("Test Name", "test@example.com", "test_url").copy(userId = "testUserId")
+        val mockFirebaseUser = mock<FirebaseUser>()
+        val mockTask = mock<Task<Void>>() // Mock Task<Void> for Firebase
+
+        whenever(authNetworkDataSource.saveUser(mockUser.userId?:"", mockUser)).thenReturn(mockTask)
+        whenever(mockFirebaseUser.uid).thenReturn("testUserId")
+
+        whenever(mockTask.addOnSuccessListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnSuccessListener<Void>
+            listener.onSuccess(null) // ✅ Simulate success
+            mockTask
+        }
+
+        // Prevent NullPointerException for addOnFailureListener
+        whenever(mockTask.addOnFailureListener(any())).thenAnswer {
+            mockTask
+        }
+
+        // Act
+        val result = authRepository.saveUserData(mockUser).toList()
+
+        // Assert
+        assert(result[0] is CinemaxResponse.Loading) // First state: Loading
+        assert(result[1] is CinemaxResponse.Success)
+        assertEquals(CinemaxResponse.Success("Registration successful"), result[1])
+    }
+
+    @Test
+    fun `saveUserData should emit failure when save operation fails`() = runBlocking {
+        // Arrange
+        val mockUser = User("Test Name", "test@example.com", "test_url").copy(userId = "testUserId")
+        val mockFirebaseUser = mock<FirebaseUser>()
+        val mockTask = mock<Task<Void>>() // Mock Task<Void> for Firebase
+        val exceptionMessage = "Firebase save failed"
+
+        whenever(authNetworkDataSource.saveUser(mockUser.userId?:"", mockUser)).thenReturn(mockTask)
+        whenever(mockFirebaseUser.uid).thenReturn("testUserId")
+
+        whenever(mockTask.addOnFailureListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnFailureListener
+            listener.onFailure(Exception(exceptionMessage)) // ✅ Simulate failure
+            mockTask
+        }
+
+        // Prevent NullPointerException for addOnSuccessListener
+        whenever(mockTask.addOnSuccessListener(any())).thenAnswer {
+            mockTask
+        }
+
+        // Act
+        val result = authRepository.saveUserData(mockUser).toList()
+
+        // Assert
+        assert(result[0] is CinemaxResponse.Loading) // First state: Loading
+        assert(result[1] is CinemaxResponse.Failure)
+        assertEquals(CinemaxResponse.Failure(exceptionMessage), result[1])
     }
 
     @Test
@@ -313,5 +436,39 @@ class AuthRepositoryImplTest {
         assertEquals("Data is Save", (result[1] as CinemaxResponse.Success).value)
     }
 
+    @Test
+    fun `saveProfile should emit failure when save operation fails`() = runTest {
+        // Mock User object
+        val mockUser = User(name = "Test User")
+        val mockFirebaseUser = mock<FirebaseUser>()
+        val mockTask = mock<Task<Void>>() // Mock Task<Void> for Firebase
+        val errorMessage = "Data Failed To Save"
 
+        // Mock getting the current user UID
+        whenever(authNetworkDataSource.getUserUid()).thenReturn(mockFirebaseUser)
+        whenever(mockFirebaseUser.uid).thenReturn("user123")
+
+        // Mock saveProfile behavior
+        whenever(authNetworkDataSource.saveProfile("user123", mockUser)).thenReturn(mockTask)
+
+        // Simulate failed Firebase operation
+        whenever(mockTask.addOnFailureListener(any())).thenAnswer {
+            val listener = it.arguments[0] as OnFailureListener
+            listener.onFailure(Exception(errorMessage)) // Simulate failure
+            mockTask
+        }
+
+        // Prevent NullPointerException for addOnSuccessListener
+        whenever(mockTask.addOnSuccessListener(any())).thenAnswer {
+            mockTask
+        }
+
+        // Collect Flow results
+        val result = authRepository.saveProfile(mockUser).toList()
+
+        // Verify emitted values
+        assert(result[0] is CinemaxResponse.Loading) // First state: Loading
+        assert(result[1] is CinemaxResponse.Failure) // Second state: Error
+        assertEquals(errorMessage, (result[1] as CinemaxResponse.Failure).error)
+    }
 }

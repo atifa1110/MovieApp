@@ -1,6 +1,5 @@
 package com.example.movieapp.wishlist.usecase
 
-import com.example.movieapp.core.domain.MovieDetailModel
 import com.example.movieapp.core.network.repository.WishListRepository
 import javax.inject.Inject
 

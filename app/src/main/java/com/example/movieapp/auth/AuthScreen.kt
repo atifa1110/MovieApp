@@ -18,8 +18,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,25 +49,42 @@ import com.example.movieapp.ui.theme.Grey
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.Soft
 import com.example.movieapp.ui.theme.White
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun AuthRoute(
     onNavigateToRegister : () -> Unit,
     onNavigateToLogin : () -> Unit
 ) {
-    AuthScreen(
-        onNavigateToRegister = onNavigateToRegister,
-        onNavigateToLogin = onNavigateToLogin
-    )
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        AuthScreen(
+            modifier = Modifier.padding(paddingValues),
+            onNavigateToRegister = onNavigateToRegister,
+            onNavigateToLogin = onNavigateToLogin,
+            onGoogleClick = { scope.showUnavailableSnackBar(snackbarHostState) },
+            onAppleClick = { scope.showUnavailableSnackBar(snackbarHostState) },
+            onFacebookClick = { scope.showUnavailableSnackBar(snackbarHostState) }
+        )
+    }
 }
 
 @Composable
 fun AuthScreen(
+    modifier: Modifier,
     onNavigateToRegister : () -> Unit,
-    onNavigateToLogin : () -> Unit
+    onNavigateToLogin : () -> Unit,
+    onGoogleClick : () -> Unit,
+    onAppleClick : () -> Unit,
+    onFacebookClick : () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Dark)
             .padding(24.dp),
@@ -99,8 +122,9 @@ fun AuthScreen(
         )
 
         AlreadyHaveAccount(onClick = { onNavigateToLogin() }, isVerification = false)
-        OrSignUpButton(onButtonClick = {})
-        SocialMediaButton(onGoogleClick = {}, onAppleClick = {}, onFacebookClick = {})
+        OrSignUpButton()
+        SocialMediaButton(onGoogleClick = onGoogleClick,
+            onAppleClick = onAppleClick, onFacebookClick = onFacebookClick)
     }
 }
 
@@ -194,10 +218,18 @@ fun SocialMediaButton(
     }
 }
 
+fun CoroutineScope.showUnavailableSnackBar(snackHostState: SnackbarHostState) {
+    launch {
+        snackHostState.showSnackbar(
+            message = "This feature is not available",
+            actionLabel = "Dismiss",
+            duration = SnackbarDuration.Short
+        )
+    }
+}
+
 @Composable
-fun OrSignUpButton(
-    onButtonClick : () -> Unit
-) {
+fun OrSignUpButton() {
     Row(modifier = Modifier
         .padding(16.dp)
         .fillMaxWidth(),
@@ -208,8 +240,7 @@ fun OrSignUpButton(
 
         Text(
             modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .clickable { onButtonClick() },
+                .padding(horizontal = 10.dp),
             text = stringResource(id = R.string.or_sign_up_with),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
@@ -226,8 +257,12 @@ fun AuthPreview(){
     MovieAppTheme {
         Surface {
             AuthScreen(
+                modifier =  Modifier,
                 onNavigateToLogin = {},
-                onNavigateToRegister = {}
+                onNavigateToRegister = {},
+                onGoogleClick = {},
+                onFacebookClick = {},
+                onAppleClick = {}
             )
         }
     }

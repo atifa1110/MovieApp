@@ -4,6 +4,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
     id("com.google.gms.google-services")
+    id("org.gradle.jacoco")
 }
 
 android {
@@ -31,6 +32,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isTestCoverageEnabled = true // ✅ Enable test coverage for debug builds
+        }
     }
 
     compileOptions {
@@ -53,6 +57,60 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    val jacocoTestReport = tasks.create("jacocoTestReport")
+
+    androidComponents.onVariants { variant ->
+        val testTaskName = "test${variant.name.capitalize()}UnitTest"
+
+
+        val reportTask =
+            tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
+                dependsOn(testTaskName)
+
+
+                reports {
+                    html.required.set(true)
+                }
+
+
+                classDirectories.setFrom(
+                    fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
+                        exclude(coverageExclusions)
+                    }
+                )
+
+
+                sourceDirectories.setFrom(
+                    files("$projectDir/src/main/java"),
+                    files("../core/src/main/java")
+                )
+                executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+            }
+
+
+        jacocoTestReport.dependsOn(reportTask)
+    }
+}
+
+private val coverageExclusions = listOf(
+    "**/R.class",
+    "*/R\$.class",
+    "*/BuildConfig.",
+    "*/Manifest.*"
+)
+
+
+configure<JacocoPluginExtension> {
+    toolVersion = "0.8.10"
+}
+
+
+tasks.withType<Test>().configureEach {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
     }
 }
 

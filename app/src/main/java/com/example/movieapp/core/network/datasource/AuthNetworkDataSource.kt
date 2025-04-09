@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,6 +23,47 @@ class AuthNetworkDataSource @Inject constructor(
 ) {
     fun getUserUid(): FirebaseUser? {
         return firebaseAuth.currentUser
+    }
+
+    fun updatePhoto(): FirebaseUser? {
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val currentUser = firebaseAuth.currentUser
+
+        currentUser?.let { user ->
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(null)
+                .build()
+
+            user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    println("User profile updated successfully")
+                } else {
+                    println("Error updating profile: ${task.exception?.message}")
+                }
+            }
+        }
+        return currentUser
+    }
+
+    fun updateData(displayName: String?, photoUrl: String?): FirebaseUser? {
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val currentUser = firebaseAuth.currentUser
+
+        currentUser?.let { user ->
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName)
+                .setPhotoUri(photoUrl?.let { Uri.parse(it) })
+                .build()
+
+            user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    println("User profile updated successfully")
+                } else {
+                    println("Error updating profile: ${task.exception?.message}")
+                }
+            }
+        }
+        return currentUser
     }
 
     fun signOut(){

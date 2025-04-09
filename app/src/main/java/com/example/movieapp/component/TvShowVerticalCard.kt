@@ -1,6 +1,5 @@
 package com.example.movieapp.component
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,12 +37,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.movieapp.R
-import com.example.movieapp.core.model.Movie
 import com.example.movieapp.core.model.TvShow
 import com.example.movieapp.core.network.getGenreName
-import com.example.movieapp.core.ui.asNames
-import com.example.movieapp.home.getFakeMovie
-import com.example.movieapp.home.getFakeTvShow
+import com.example.movieapp.home.presentation.getFakeTvShow
 import com.example.movieapp.ui.theme.Grey
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.Orange

@@ -180,7 +180,7 @@ fun CinemaxPhoneField(
         onValueChange = { onPhoneChange(it) },
         label = { Text(stringResource(labelName), color = White) },
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().testTag("PhoneInput"),
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Grey,
             focusedLabelColor = White,

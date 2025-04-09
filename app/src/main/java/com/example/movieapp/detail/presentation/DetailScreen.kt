@@ -64,7 +64,7 @@ import com.example.movieapp.core.model.Images
 import com.example.movieapp.core.model.MediaType
 import com.example.movieapp.core.model.MovieDetails
 import com.example.movieapp.core.network.getGenreName
-import com.example.movieapp.home.getFakeDetailMovie
+import com.example.movieapp.home.presentation.getFakeDetailMovie
 import com.example.movieapp.ui.theme.BlueAccent
 import com.example.movieapp.ui.theme.Dark
 import com.example.movieapp.ui.theme.Grey

@@ -7,87 +7,79 @@ import com.example.movieapp.login.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StorageRepositoryImpl @Inject constructor(
     private val authNetworkDataSource: AuthNetworkDataSource
 ) : StorageRepository{
 
-    override fun saveProfile(user: User, result: (CinemaxResponse<String>) -> Unit) {
-        val userUid = authNetworkDataSource.getUserUid()?.uid ?: ""
-        authNetworkDataSource.saveProfile(userUid, user).addOnSuccessListener {
-            result(CinemaxResponse.Success("Data is Saved Successfully"))
-        }.addOnFailureListener {
-            result(CinemaxResponse.Failure("Data is Failed To Save"))
-        }
-    }
+    override fun uploadImageUri(imageUri: Uri): Flow<CinemaxResponse<String>> = callbackFlow {
+        trySend(CinemaxResponse.Loading) // Emit loading state
 
-    override fun uploadImageAndSaveUri(user: User,imageUri: Uri): Flow<CinemaxResponse<String>> = callbackFlow {
-        send(CinemaxResponse.Loading)
         val fileRef = authNetworkDataSource.uploadStorage()
-        val task = fileRef.putFile(imageUri)
+        val uploadTask = fileRef.putFile(imageUri)
 
-        task.addOnCompleteListener{ result->
-            if(result.isSuccessful) {
-                fileRef.downloadUrl.addOnSuccessListener {
-                    val downloadUrl = it.toString()
-                    user.photo = downloadUrl
-                    saveProfile(user){ response->
-                        when(response){
-                            is CinemaxResponse.Failure -> trySend(CinemaxResponse.Failure(response.error))
-                            is CinemaxResponse.Loading -> trySend(CinemaxResponse.Loading)
-                            is CinemaxResponse.Success -> trySend(CinemaxResponse.Success(response.value))
-                        }
-                    }
-                }
-                trySend(CinemaxResponse.Success("Upload to Storage is Success"))
-            }else{
-                trySend(CinemaxResponse.Failure("Upload to Storage is Failed"))
+        // Listener untuk menangani sukses dan kegagalan
+        uploadTask.addOnSuccessListener {
+            fileRef.downloadUrl.addOnSuccessListener { uri ->
+                trySend(CinemaxResponse.Success(uri.toString())) // Emit sukses dengan URL gambar
+                close() // Tutup flow setelah berhasil
+            }.addOnFailureListener { e ->
+                trySend(CinemaxResponse.Failure("Failed to get download URL"))
+                close() // Tutup flow setelah gagal
             }
-        }.addOnFailureListener{
-            trySend(CinemaxResponse.Failure("Unexpected Error"))
+        }.addOnFailureListener { e ->
+            trySend(CinemaxResponse.Failure("Image upload failed"))
+            close() // Tutup flow setelah gagal
         }
 
-        // Provide a cancellation mechanism
-        awaitClose { task.cancel() }
+        awaitClose ()
     }
 
-    fun removeProfileImage(onComplete: (CinemaxResponse<String>) -> Unit) : Task<Void> {
-        val ref = authNetworkDataSource.removeProfileDatabase()
 
-        val updates = hashMapOf<String, Any>(
-            "photo" to ""
-        )
-        // i add return cause the function return task<void>
-        return ref.update(updates)
-            .addOnSuccessListener {
-                onComplete(CinemaxResponse.Success("Image URL Removed Successfully from Firestore"))
+    override fun removeProfileImage(): Flow<CinemaxResponse<String>> = callbackFlow {
+        val ref = authNetworkDataSource.removeProfileDatabase()
+        val updates = hashMapOf<String, Any>("photo" to "")
+
+        ref.update(updates).addOnSuccessListener {
+                trySend(CinemaxResponse.Success("Image URL Removed Successfully from Firestore"))
+                close()
             }
-            .addOnFailureListener { exception ->
-                onComplete(CinemaxResponse.Failure(exception.localizedMessage ?: "Failed to Remove Image URL from Firestore"))
+            .addOnFailureListener {
+                trySend(CinemaxResponse.Failure("Failed to Remove Image URL"))
+                close()
             }
+
+        awaitClose() // Close the flow when the scope is cancelled
     }
 
     override fun deleteProfileFromStorage(imageUrl: String) : Flow<CinemaxResponse<String>> = callbackFlow{
         send(CinemaxResponse.Loading)
         val storageRef = authNetworkDataSource.deleteStorage(imageUrl)
-        storageRef.delete()
-            .addOnSuccessListener {
-                trySend(CinemaxResponse.Success("Image Deleted Successfully from Storage"))
-                removeProfileImage{ response ->
-                    when(response){
-                        is CinemaxResponse.Failure -> trySend(CinemaxResponse.Failure(response.error))
-                        CinemaxResponse.Loading -> trySend(CinemaxResponse.Loading)
-                        is CinemaxResponse.Success -> trySend(CinemaxResponse.Success(response.value))
+        storageRef.delete().addOnSuccessListener {
+            trySend(CinemaxResponse.Success("Image Deleted Successfully from Storage"))
+            launch {
+                removeProfileImage().collectLatest { response ->
+                    if (response is CinemaxResponse.Success) {
+                        authNetworkDataSource.updatePhoto()
                     }
+                    trySend(response) // Send response only once
                 }
             }
-            .addOnFailureListener { exception ->
-                trySend(CinemaxResponse.Failure(exception.localizedMessage ?: "Failed to Delete Image from Storage"))
-            }
-        awaitClose {  storageRef.delete() }
+        }.addOnFailureListener { exception ->
+            trySend(CinemaxResponse.Failure(exception.localizedMessage ?: "Failed to Delete Image from Storage"))
+        }
+
+        awaitClose()
     }
 }

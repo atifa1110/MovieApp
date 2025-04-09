@@ -2,7 +2,7 @@ package com.example.movieapp.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.movieapp.register.RegisterRoute
+import com.example.movieapp.register.presentation.RegisterRoute
 
 object RegisterDestination : CinemaxNavigationDestination {
     override val route: String = "register_route"

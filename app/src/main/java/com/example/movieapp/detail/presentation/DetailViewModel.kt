@@ -143,7 +143,6 @@ class DetailViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = true) }
                 }
                 is CinemaxResponse.Success -> {
-                    Log.d("Load Tv Success: ", response.value.toString())
                     _uiState.update { it.copy(tvShow = response.value?.asTvShowDetails(),
                         isLoading = false) }
                 }

@@ -9,9 +9,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
     fun getUserId() : FirebaseUser?
+
     fun signInWithEmailAndPassword(email: String, password: String) : Flow<CinemaxResponse<String>>
+
+    fun registerFirebaseUser(email: String, password: String, user: User): Flow<CinemaxResponse<User>>
+
+    fun saveUserData(user: User): Flow<CinemaxResponse<String>>
+
     fun registerWithEmailAndPassword(email: String, password: String, user : User) : Flow<CinemaxResponse<String>>
-    fun updateUserInfo(user: User, result: (CinemaxResponse<String>) -> Unit)
+
     fun logout()
     fun getProfile() : Flow<CinemaxResponse<User>>
     fun saveProfile(user: User) : Flow<CinemaxResponse<String>>

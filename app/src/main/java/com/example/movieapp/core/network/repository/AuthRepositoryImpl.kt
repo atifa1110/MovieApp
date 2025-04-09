@@ -50,85 +50,114 @@ class AuthRepositoryImpl @Inject constructor(
         awaitClose { task.isCanceled }
     }
 
+    // Function for Firebase authentication
+    override fun registerFirebaseUser(email: String, password: String, user: User): Flow<CinemaxResponse<User>> = callbackFlow {
+        trySend(CinemaxResponse.Loading)
+
+        authNetworkDataSource.registerWithEmailAndPassword(email, password)
+            .addOnCompleteListener { taskResult ->
+                if (taskResult.isSuccessful) {
+                    val firebaseUser = taskResult.result?.user
+                    if (firebaseUser != null) {
+                        user.userId = firebaseUser.uid
+
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(user.name)
+                            .build()
+
+                        firebaseUser.updateProfile(profileUpdates)
+                            .addOnCompleteListener { profileTask ->
+                                if (profileTask.isSuccessful) {
+                                    trySend(CinemaxResponse.Success(user))
+                                    close()
+                                } else {
+                                    trySend(CinemaxResponse.Failure(profileTask.exception?.message ?: "Failed to update profile"))
+                                    close()
+                                }
+                            }
+                    } else {
+                        trySend(CinemaxResponse.Failure("Registration failed: Unable to retrieve FirebaseUser."))
+                        close()
+                    }
+                } else {
+                    val errorMessage = when (val exception = taskResult.exception) {
+                        is FirebaseAuthWeakPasswordException -> "Password should be at least 8 characters"
+                        is FirebaseAuthInvalidCredentialsException -> "Invalid email entered"
+                        is FirebaseAuthUserCollisionException -> "Email already registered."
+                        else -> exception?.message ?: "Unexpected Error"
+                    }
+                    trySend(CinemaxResponse.Failure(errorMessage))
+                    close()
+                }
+            }
+            .addOnFailureListener { e ->
+                trySend(CinemaxResponse.Failure(e.localizedMessage ?: "Unexpected Error"))
+                close()
+            }
+
+        awaitClose()
+    }
+
+    // Function for saving user data to the database
+    override fun saveUserData(user: User): Flow<CinemaxResponse<String>> = callbackFlow {
+        trySend(CinemaxResponse.Loading)
+
+        user.userId?.let { userId ->
+            authNetworkDataSource.saveUser(userId, user)
+                .addOnSuccessListener {
+                    trySend(CinemaxResponse.Success("Registration successful"))
+                    close()
+                }
+                .addOnFailureListener { e ->
+                    trySend(CinemaxResponse.Failure(e.localizedMessage ?: "Failed to save user data"))
+                    close()
+                }
+        } ?: run {
+            trySend(CinemaxResponse.Failure("User ID is missing"))
+            close()
+        }
+        awaitClose ()
+    }
+
+    // Combined registration function
     override fun registerWithEmailAndPassword(
         email: String,
         password: String,
         user: User
     ): Flow<CinemaxResponse<String>> = callbackFlow {
-        // Emit loading state
-        send(CinemaxResponse.Loading)
-
-        val task = authNetworkDataSource.registerWithEmailAndPassword(email,password)
-        // Use a listener for the task completion
-        task.addOnCompleteListener { taskResult ->
-            trySend(CinemaxResponse.Loading)
-            if(taskResult.isSuccessful){
-                // Get the created FirebaseUser
-                val firebaseUser = taskResult.result?.user
-                if(firebaseUser != null){
-                    user.userId = firebaseUser.uid
-                    //user.userId = taskResult.result.user?.uid?:""
-
-                    // Build a profile update request
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(user.name)
-                        .build()
-
-                    firebaseUser.updateProfile(profileUpdates).addOnCompleteListener{ profileTask ->
-                        if(profileTask.isSuccessful){
-                            updateUserInfo(user) { state ->
-                                when (state) {
-                                    is CinemaxResponse.Failure -> trySend(CinemaxResponse.Failure(state.error))
-                                    is CinemaxResponse.Loading -> trySend(CinemaxResponse.Loading)
-                                    is CinemaxResponse.Success -> trySend(CinemaxResponse.Success(state.value))
-                                }
+        registerFirebaseUser(email, password, user).collect { firebaseResponse ->
+            when (firebaseResponse) {
+                is CinemaxResponse.Success -> {
+                    saveUserData(firebaseResponse.value).collect { saveResponse ->
+                        when (saveResponse) {
+                            is CinemaxResponse.Success -> {
+                                trySend(CinemaxResponse.Success(saveResponse.value))
                                 close()
                             }
-                        }else{
-                            trySend(CinemaxResponse.Failure(profileTask.exception?.message ?: "Failed to update profile"))
-                            close()
+
+                            is CinemaxResponse.Failure -> {
+                                trySend(CinemaxResponse.Failure(saveResponse.error))
+                                close()
+                            }
+
+                            is CinemaxResponse.Loading -> {
+                                trySend(CinemaxResponse.Loading)
+                            }
                         }
                     }
-                }else{
-                    trySend(CinemaxResponse.Failure("Registration failed: Unable to retrieve FirebaseUser."))
+                }
+
+                is CinemaxResponse.Failure -> {
+                    trySend(CinemaxResponse.Failure(firebaseResponse.error))
                     close()
                 }
-            }else{
-                try {
-                    throw taskResult.exception ?: java.lang.Exception("Invalid authentication")
-                } catch (e: FirebaseAuthWeakPasswordException) {
-                    trySend(CinemaxResponse.Failure("Authentication failed, Password should be at least 8 characters"))
-                } catch (e: FirebaseAuthInvalidCredentialsException) {
-                    trySend(CinemaxResponse.Failure("Authentication failed, Invalid email entered"))
-                } catch (e: FirebaseAuthUserCollisionException) {
-                    trySend(CinemaxResponse.Failure("Authentication failed, Email already registered."))
-                } catch (e: Exception) {
-                    trySend(CinemaxResponse.Failure(e.message?:"Unexpected Error"))
+
+                is CinemaxResponse.Loading -> {
+                    trySend(CinemaxResponse.Loading)
                 }
-                close()
             }
-        }.addOnFailureListener{
-            trySend(CinemaxResponse.Failure(it.localizedMessage?:"Unexpected Error"))
-            close()
         }
-
-        // Provide a cancellation mechanism
-        awaitClose { task.isCanceled }
-    }
-
-    override fun updateUserInfo(user: User, result: (CinemaxResponse<String>) -> Unit) {
-        result.invoke(CinemaxResponse.Loading)
-        authNetworkDataSource.saveUser(user.userId?:"",user)
-            .addOnSuccessListener {
-                result.invoke(
-                    CinemaxResponse.Success("User has been update successfully")
-                )
-            }
-            .addOnFailureListener {
-                result.invoke(
-                    CinemaxResponse.Failure(it.localizedMessage?:"Unexpected Error")
-                )
-            }
+        awaitClose()
     }
 
     override fun logout() {
@@ -169,6 +198,7 @@ class AuthRepositoryImpl @Inject constructor(
 
         val userUid = authNetworkDataSource.getUserUid()?.uid ?: ""
         val task = authNetworkDataSource.saveProfile(userUid, user).addOnSuccessListener { task->
+            authNetworkDataSource.updateData(user.name,user.photo)
             trySend(CinemaxResponse.Success("Data is Save"))
             close()
         }.addOnFailureListener {

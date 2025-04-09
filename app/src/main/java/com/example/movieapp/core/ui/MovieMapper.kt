@@ -3,6 +3,7 @@ package com.example.movieapp.core.ui
 import com.example.movieapp.core.domain.MovieModel
 import com.example.movieapp.core.domain.SearchModel
 import com.example.movieapp.core.model.Movie
+fun List<MovieModel>.asMovies(): List<Movie> = this.map { it.asMovie() }
 
 fun MovieModel.asMovie() = Movie(
     id = id,

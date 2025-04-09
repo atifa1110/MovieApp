@@ -1,6 +1,7 @@
 package com.example.movieapp.core.network.repository
 
 import android.util.Log
+
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingData
@@ -19,8 +20,6 @@ import com.example.movieapp.core.database.mapper.asGenreEntity
 import com.example.movieapp.core.database.mapper.asGenreModel
 import com.example.movieapp.core.database.model.movie.GenreEntity
 import com.example.movieapp.core.database.mapper.GenreModel
-import com.example.movieapp.core.database.model.movie.MovieGenreCrossRef
-import com.example.movieapp.core.database.model.movie.MovieWithGenreNames
 import com.example.movieapp.core.database.model.movie.MovieWithGenres
 import com.example.movieapp.core.network.GenreNetwork
 import com.example.movieapp.core.network.PAGE_SIZE

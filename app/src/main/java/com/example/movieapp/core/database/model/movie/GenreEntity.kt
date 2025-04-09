@@ -16,7 +16,4 @@ data class GenreEntity (
 
     @ColumnInfo(name = Constants.Fields.NAME)
     val name: String,
-
-//    @ColumnInfo(name = Constants.Fields.MOVIE_ID) // This is the foreign key column
-//    val movieId: Int // Foreign key referencing MovieEntity's id
 )

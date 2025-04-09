@@ -67,9 +67,8 @@ fun CinemaxNavHost(
             onNavigateToForgotPassword = {},
             onNavigateToHome = {
                 navController.navigate(MainDestination.route){
-                    popUpTo(AuthDestination.route){
-                        inclusive = true
-                    }
+                    popUpTo(AuthDestination.route){ inclusive = true }
+                    launchSingleTop = true
                 }
             }
         )
@@ -97,7 +96,6 @@ fun CinemaxNavHost(
             },
             onNavigateToList = {
                 navController.navigate(ListDestination.createNavigationRoute(it))
-                Log.d("NavigationListDestination", "Navigating to: ${ListDestination.createNavigationRoute(it)}")
             },
             onNavigateToWishlist = {
                 navController.navigate(WishlistDestination.route)

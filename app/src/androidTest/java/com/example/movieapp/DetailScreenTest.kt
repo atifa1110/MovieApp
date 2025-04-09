@@ -9,14 +9,13 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.movieapp.core.model.MediaType
 import com.example.movieapp.detail.presentation.DetailScreen
 import com.example.movieapp.detail.presentation.DetailsUiState
-import com.example.movieapp.home.getFakeDetailMovie
-import com.example.movieapp.home.getFakeDetailTvShow
+import com.example.movieapp.home.presentation.getFakeDetailMovie
+import com.example.movieapp.home.presentation.getFakeDetailTvShow
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

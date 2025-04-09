@@ -20,13 +20,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
-import com.example.movieapp.profile.EditProfileUiState
-import com.example.movieapp.profile.createImageFile
+import com.example.movieapp.profile.presentation.EditProfileUiState
+import com.example.movieapp.profile.presentation.createImageFile
 import com.example.movieapp.ui.theme.Grey
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.Soft
@@ -81,17 +82,20 @@ fun ProfileImageSelector(
             containerColor = Soft,
             content = {
                 Column(modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().testTag("ModalBottomSheet")
                     .padding(16.dp),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    TextButton(onClick = { galleryLauncher.launch("image/*") }) {
+                    TextButton(
+                        modifier = Modifier.testTag("SelectGallery"),
+                        onClick = { galleryLauncher.launch("image/*") }) {
                         Text("Select from Gallery", color = Color.White)
                     }
 
 
                     TextButton(
+                        modifier = Modifier.testTag("TakePhoto"),
                         onClick = {
                             if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                                 cameraLauncher.launch(uri)
@@ -105,7 +109,9 @@ fun ProfileImageSelector(
                     }
 
 
-                    TextButton(onClick = {
+                    TextButton(
+                        modifier = Modifier.testTag("DeletePhoto"),
+                        onClick = {
                         onDeleteProfile()
                         onSheetOpen(false)
                     }) {
@@ -119,7 +125,7 @@ fun ProfileImageSelector(
 
     // Profile Image Column (Clickable to open bottom sheet)
     Column(
-        modifier = Modifier
+        modifier = Modifier.testTag("SelectImage")
             .padding(10.dp)
             .clickable { onSheetOpen(true) }
             .size(88.dp)
@@ -141,7 +147,7 @@ fun ProfileImageSelector(
             }
             imageUri != null -> {
                 AsyncImage(
-                    modifier = Modifier
+                    modifier = Modifier.testTag("ProfileImageUri")
                         .fillMaxSize()
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop,

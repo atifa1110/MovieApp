@@ -1,6 +1,5 @@
 package com.example.movieapp.core.data
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -62,16 +61,11 @@ class MovieRemoteMediator(
             when(response) {
                 is CinemaxResponse.Success -> {
                     coroutineScope {
-                        //val movies = response.value.results?.map { it.asMovieEntity(mediaType, 0) }
-                        val movies =
-                            response.value.results?.map { movieNetwork ->
+                        val movies = response.value.results?.map { movieNetwork ->
                                 async {
                                     when (val runtime = networkDataSource.getDetailMovie(movieNetwork.id ?: 0)) {
                                         is CinemaxResponse.Success -> movieNetwork.asMovieEntity(mediaType,runtime.value.runtime)
-                                        is CinemaxResponse.Failure -> {
-                                            Log.e("MovieRemoteMediator", "Failed to fetch runtime for movie ID: ${movieNetwork.id}, Error: ${runtime.error}")
-                                            null
-                                        }
+                                        is CinemaxResponse.Failure -> null
                                         CinemaxResponse.Loading -> null
                                     }
                                 }

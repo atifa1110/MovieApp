@@ -14,7 +14,7 @@ fun NetworkImages.asImagesEntity() = ImagesEntity(
     posters = posters.map(NetworkImage::asImageEntity)
 )
 
-private fun NetworkImage.asImageEntity() = ImageEntity(
+internal fun NetworkImage.asImageEntity() = ImageEntity(
     aspectRatio = aspectRatio,
     height = height,
     width = width,
@@ -26,7 +26,7 @@ fun ImagesEntity.asImagesModel() = ImagesModel(
     posters = posters.map(ImageEntity::asImageModel)
 )
 
-private fun ImageEntity.asImageModel() = ImageModel(
+internal fun ImageEntity.asImageModel() = ImageModel(
     aspectRatio = aspectRatio,
     height = height,
     width = width,

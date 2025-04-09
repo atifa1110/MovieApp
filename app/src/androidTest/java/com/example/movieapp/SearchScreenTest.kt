@@ -4,13 +4,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.assertAny
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -20,11 +15,9 @@ import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.movieapp.core.model.Movie
-import com.example.movieapp.home.getFakeMovie
-import com.example.movieapp.home.getFakeTvShow
-import com.example.movieapp.login.presentation.LoginUiState
+import com.example.movieapp.home.presentation.getFakeMovie
+import com.example.movieapp.home.presentation.getFakeTvShow
 import com.example.movieapp.search.presentation.HistoryUiState
 import com.example.movieapp.search.presentation.SearchScreen
 import com.example.movieapp.search.presentation.SearchUiState
@@ -33,12 +26,10 @@ import com.example.movieapp.search.presentation.TrendingTvUiState
 import com.example.movieapp.ui.theme.MovieAppTheme
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class SearchScreenTest {
@@ -75,11 +66,17 @@ class SearchScreenTest {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val uiState = remember { mutableStateOf(SearchUiState(
                     trendingMovieUiState = TrendingMovieUiState(
-                        trendingMovies = listOf(getFakeMovie(1,"Trending Movies 1"),getFakeMovie(3,"Trending Movies 2")),
+                        trendingMovies = listOf(
+                            getFakeMovie(1,"Trending Movies 1"),
+                            getFakeMovie(3,"Trending Movies 2")
+                        ),
                         isTrendingMovie = false
                     ),
                     trendingTvUiState = TrendingTvUiState(
-                        trendingTv = listOf(getFakeTvShow(1,"Trending Tv 1"),getFakeTvShow(2,"Trending Tv 2")),
+                        trendingTv = listOf(
+                            getFakeTvShow(1,"Trending Tv 1"),
+                            getFakeTvShow(2,"Trending Tv 2")
+                        ),
                         isTrendingTv = false
                     )
                 )) }
@@ -120,11 +117,17 @@ class SearchScreenTest {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val uiState = remember { mutableStateOf(SearchUiState(
                     trendingMovieUiState = TrendingMovieUiState(
-                        trendingMovies = listOf(getFakeMovie(1,"Trending Movies 1"),getFakeMovie(3,"Trending Movies 2")),
+                        trendingMovies = listOf(
+                            getFakeMovie(1,"Trending Movies 1"),
+                            getFakeMovie(3,"Trending Movies 2")
+                        ),
                         isTrendingMovie = false
                     ),
                     trendingTvUiState = TrendingTvUiState(
-                        trendingTv = listOf(getFakeTvShow(1,"Trending Tv 1"),getFakeTvShow(2,"Trending Tv 2")),
+                        trendingTv = listOf(
+                            getFakeTvShow(1,"Trending Tv 1"),
+                            getFakeTvShow(2,"Trending Tv 2")
+                        ),
                         isTrendingTv = false
                     )
                 )) }
@@ -163,11 +166,17 @@ class SearchScreenTest {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val uiState = remember { mutableStateOf(SearchUiState(
                     trendingMovieUiState = TrendingMovieUiState(
-                        trendingMovies = listOf(getFakeMovie(1,"Trending Movies 1"),getFakeMovie(3,"Trending Movies 2")),
+                        trendingMovies = listOf(
+                            getFakeMovie(1,"Trending Movies 1"),
+                            getFakeMovie(3,"Trending Movies 2")
+                        ),
                         isTrendingMovie = false
                     ),
                     trendingTvUiState = TrendingTvUiState(
-                        trendingTv = listOf(getFakeTvShow(1,"Trending Tv 1"),getFakeTvShow(2,"Trending Tv 2")),
+                        trendingTv = listOf(
+                            getFakeTvShow(1,"Trending Tv 1"),
+                            getFakeTvShow(2,"Trending Tv 2")
+                        ),
                         isTrendingTv = false
                     )
                 )) }

@@ -2,15 +2,12 @@ package com.example.movieapp.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieapp.R
 import com.example.movieapp.core.datastore.DataStoreRepository
 import com.example.movieapp.core.network.response.CinemaxResponse
 import com.example.movieapp.login.usecase.SignInWithEmailAndPasswordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,7 +35,7 @@ class LoginViewModel @Inject constructor(
         val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)\$"
         val error = when {
             newEmail.isBlank() -> "Email cannot be empty"
-            !newEmail.matches(emailRegex.toRegex()) -> "Invalid email format"
+            !newEmail.matches(emailRegex.toRegex())-> "Invalid email format"
             else -> null
         }
         _uiState.update {
@@ -56,11 +53,8 @@ class LoginViewModel @Inject constructor(
             it.copy(password = newPassword, passwordError = error)
         }
     }
-
-    private fun setLoginState(completed: Boolean){
-        viewModelScope.launch {
-            dataStoreRepository.saveOnLoginState(completed)
-        }
+    private fun setLoginState(completed: Boolean) = viewModelScope.launch {
+        dataStoreRepository.saveOnLoginState(completed)
     }
 
     fun snackBarMessageShown(){
@@ -79,12 +73,15 @@ class LoginViewModel @Inject constructor(
                                 userMessage = result.value
                             )
                         }
-                        setLoginState(true)
+                        setLoginState(_uiState.value.isLogin)
                     }
 
                     is CinemaxResponse.Loading -> {
                         _uiState.update {
-                            it.copy(isLoading = true)
+                            it.copy(
+                                isLoading = true,
+                                isLogin = false
+                            )
                         }
                     }
 
@@ -92,6 +89,7 @@ class LoginViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
+                                isLogin = false,
                                 userMessage = result.error
                             )
                         }

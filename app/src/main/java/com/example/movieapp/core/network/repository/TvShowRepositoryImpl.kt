@@ -5,16 +5,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.example.movieapp.core.data.TvShowRemoteMediator
 import com.example.movieapp.core.data.asMediaType
-import com.example.movieapp.core.data.asMovieEntity
-import com.example.movieapp.core.data.asMovieModel
 import com.example.movieapp.core.data.asNetworkMediaType
 import com.example.movieapp.core.data.asTvShowEntity
 import com.example.movieapp.core.data.asTvShowModel
 import com.example.movieapp.core.data.listMap
 import com.example.movieapp.core.data.pagingMap
-import com.example.movieapp.core.database.model.movie.MovieEntity
 import com.example.movieapp.core.database.model.tv.TvShowEntity
-import com.example.movieapp.core.database.source.MovieDatabaseSource
 import com.example.movieapp.core.database.source.TvShowDatabaseSource
 import com.example.movieapp.core.domain.MediaTypeModel
 import com.example.movieapp.core.domain.TvShowModel

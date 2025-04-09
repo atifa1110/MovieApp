@@ -2,7 +2,7 @@ package com.example.movieapp.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.movieapp.profile.EditProfileRoute
+import com.example.movieapp.profile.presentation.EditProfileRoute
 
 object EditProfileDestination : CinemaxNavigationDestination {
     override val route = "edit_profile_route"

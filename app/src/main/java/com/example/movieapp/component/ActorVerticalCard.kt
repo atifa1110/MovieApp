@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.movieapp.R
 import com.example.movieapp.core.model.Movie
-import com.example.movieapp.home.getFakeMovieActor
+import com.example.movieapp.home.presentation.getFakeMovieActor
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.Soft
 import com.example.movieapp.ui.theme.White

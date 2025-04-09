@@ -51,7 +51,7 @@ fun CinemaxButton(
             contentColor = White,
             disabledContentColor = Grey
         ),
-        modifier = Modifier
+        modifier = Modifier.testTag("CinemaxButton")
             .fillMaxWidth()
             .height(56.dp),
         shape = CircleShape

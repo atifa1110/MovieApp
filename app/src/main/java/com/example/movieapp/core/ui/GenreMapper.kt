@@ -6,8 +6,6 @@ import com.example.movieapp.R
 import com.example.movieapp.core.model.Genre
 import com.example.movieapp.core.domain.GenreModel
 
-
-
 @Composable
 fun List<Genre>.asNames() = map { genre -> stringResource(id = genre.nameResourceId) }
 

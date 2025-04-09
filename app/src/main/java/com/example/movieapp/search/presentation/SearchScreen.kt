@@ -1,13 +1,11 @@
 package com.example.movieapp.search.presentation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,10 +30,9 @@ import androidx.paging.PagingState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieapp.R
-import com.example.movieapp.component.GenreListContainer
 import com.example.movieapp.component.SearchTextField
 import com.example.movieapp.core.model.Movie
-import com.example.movieapp.home.getFakeMovieListModel
+import com.example.movieapp.home.presentation.getFakeMovieListModel
 import com.example.movieapp.component.MovieHorizontalSearchCard
 import com.example.movieapp.component.MovieShimmerHorizontalCard
 import com.example.movieapp.component.MoviesContainer
@@ -43,8 +40,8 @@ import com.example.movieapp.component.MoviesPagingContainer
 import com.example.movieapp.component.TvContainer
 import com.example.movieapp.core.model.MediaType
 import com.example.movieapp.core.model.TvShow
-import com.example.movieapp.home.getFakeMovieList
-import com.example.movieapp.home.getFakeMovieList2Model
+import com.example.movieapp.home.presentation.getFakeMovieList
+import com.example.movieapp.home.presentation.getFakeMovieList2Model
 import com.example.movieapp.ui.theme.Dark
 import com.example.movieapp.ui.theme.MovieAppTheme
 import kotlinx.coroutines.flow.emptyFlow

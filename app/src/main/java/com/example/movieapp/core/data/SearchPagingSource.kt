@@ -24,14 +24,12 @@ class SearchPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieModel> {
         return try {
             val currentPage = params.key ?: DEFAULT_PAGE
-            val response = networkDataSource.search(page = currentPage, query = query)
 
-            when(response){
-                is CinemaxResponse.Loading -> TODO()
+            when(val response = networkDataSource.search(page = currentPage, query = query)){
+                is CinemaxResponse.Loading -> LoadResult.Page(emptyList(), prevKey = null, nextKey = null)
                 is CinemaxResponse.Success -> {
                     coroutineScope {
-                        val data =
-                            response.value.results?.filter { it.mediaType == "movie" || it.mediaType == "tv" }
+                        val data = response.value.results?.filter { it.mediaType == "movie" || it.mediaType == "tv" }
                                 ?.map { movieNetwork ->
                                     async {
                                         when(val runtime = networkDataSource.getDetailMovie(movieNetwork.id ?: 0)) {
@@ -44,20 +42,16 @@ class SearchPagingSource(
 
                         val endOfPaginationReached = data?.isEmpty() ?: false
 
-                        val prevPage = if (currentPage == 1) null else currentPage - 1
-                        val nextPage = if (endOfPaginationReached) null else currentPage + 1
-
                         LoadResult.Page(
                             data = data ?: emptyList(),
-                            prevKey = prevPage,
-                            nextKey = nextPage
+                            prevKey = if (currentPage == 1) null else currentPage - 1,
+                            nextKey = if (endOfPaginationReached) null else currentPage + 1
                         )
                     }
                 }
 
-                is CinemaxResponse.Failure -> {
-                    LoadResult.Error(Exception(response.error))
-                }
+                is CinemaxResponse.Failure -> LoadResult.Error(Exception(response.error))
+
             }
 
         } catch (exception: IOException) {
