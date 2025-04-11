@@ -30,21 +30,21 @@ jobs:
 
       # The next step will run the unit tests
       - android/run-tests:
-          test-command: ./gradlew lint testDebug --continue
+        test-command: ./gradlew lint testDebug --continue
       
-       - run:
-          name: Give gradlew permission
-          command: chmod +x ./gradlew
+      - run:
+        name: Give gradlew permission
+        command: chmod +x ./gradlew
       
        # clean project
       - run:
-          name: Clean project
-          command: ./gradlew clean
+        name: Clean project
+        command: ./gradlew clean
 
        # run unit testing
       - run:
-          name: Run Unit Tests
-          command: ./gradlew test
+        name: Run Unit Tests
+        command: ./gradlew test
       
       - store_test_results:
         path: app/build/test-results
