@@ -129,6 +129,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.ui:ui-util")
     implementation("androidx.compose.material3:material3")
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
     implementation("com.google.firebase:firebase-auth")
@@ -142,14 +143,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    implementation("androidx.compose.ui:ui-util:1.2.1")
-    implementation("com.google.android.exoplayer:exoplayer:2.19.0")
-
-    // Media3 with ExoPlayer
-    implementation("androidx.media3:media3-exoplayer:1.0.0")
-    implementation("androidx.media3:media3-ui:1.0.0") // For UI components like PlayerView
-    implementation("androidx.media3:media3-session:1.0.0") // For media session handling
 
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
