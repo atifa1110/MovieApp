@@ -1,3 +1,5 @@
+import java.util.Locale
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -32,9 +34,7 @@ android {
                 "proguard-rules.pro"
             )
         }
-        debug {
-            isTestCoverageEnabled = true // ✅ Enable test coverage for debug builds
-        }
+
     }
 
     compileOptions {
@@ -46,9 +46,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    kapt{
-        correctErrorTypes = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -62,11 +59,19 @@ android {
     val jacocoTestReport = tasks.create("jacocoTestReport")
 
     androidComponents.onVariants { variant ->
-        val testTaskName = "test${variant.name.capitalize()}UnitTest"
+        val testTaskName = "test${variant.name.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }}UnitTest"
 
 
         val reportTask =
-            tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
+            tasks.register("jacoco${testTaskName.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            }}Report", JacocoReport::class) {
                 dependsOn(testTaskName)
 
 
@@ -170,7 +175,6 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-paging:$room_version")
-
     implementation ("io.coil-kt:coil-compose:2.1.0")
 
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
