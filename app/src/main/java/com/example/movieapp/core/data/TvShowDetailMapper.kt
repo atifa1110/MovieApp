@@ -1,6 +1,6 @@
 package com.example.movieapp.core.data
 
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
 import com.example.movieapp.core.database.model.tv.TvShowDetailsEntity
 import com.example.movieapp.core.domain.TvShowDetailModel
 import com.example.movieapp.core.network.asImageURL

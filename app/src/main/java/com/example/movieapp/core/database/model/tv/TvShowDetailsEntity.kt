@@ -3,7 +3,7 @@ package com.example.movieapp.core.database.model.tv
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
 import com.example.movieapp.core.database.model.movie.Genre
 import com.example.movieapp.core.database.util.Constants
 

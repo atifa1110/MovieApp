@@ -1,4 +1,4 @@
-package com.example.movieapp.core.database.model.detailmovie
+package com.example.movieapp.core.database.model.detailMovie
 
 import com.example.movieapp.core.database.util.Constants
 import com.google.gson.annotations.SerializedName

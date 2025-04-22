@@ -16,8 +16,8 @@ import com.example.movieapp.core.database.dao.tv.TvShowDetailsDao
 import com.example.movieapp.core.database.dao.wishlist.WishlistDao
 import com.example.movieapp.core.database.dao.tv.TvShowDao
 import com.example.movieapp.core.database.dao.tv.TvShowRemoteKeyDao
+import com.example.movieapp.core.database.model.detailMovie.MovieDetailsEntity
 import com.example.movieapp.core.database.model.movie.GenreEntity
-import com.example.movieapp.core.database.model.detailmovie.MovieDetailsEntity
 import com.example.movieapp.core.database.model.tv.TvShowDetailsEntity
 import com.example.movieapp.core.database.model.movie.MovieEntity
 import com.example.movieapp.core.database.model.movie.MovieGenreCrossRef

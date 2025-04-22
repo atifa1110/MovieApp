@@ -1,7 +1,7 @@
 package com.example.movieapp.core.database.source
 
 import com.example.movieapp.core.database.dao.movie.MovieDetailsDao
-import com.example.movieapp.core.database.model.detailmovie.MovieDetailsEntity
+import com.example.movieapp.core.database.model.detailMovie.MovieDetailsEntity
 import com.example.movieapp.core.database.util.DatabaseTransactionProvider
 import javax.inject.Inject
 

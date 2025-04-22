@@ -1,4 +1,4 @@
-package com.example.movieapp.core.database.model.detailmovie
+package com.example.movieapp.core.database.model.detailMovie
 
 data class ImagesEntity(
     val backdrops : List<ImageEntity>,

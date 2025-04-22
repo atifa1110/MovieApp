@@ -1,9 +1,9 @@
 package com.example.movieapp.core.data
 
 
-import com.example.movieapp.core.database.model.detailmovie.CastEntity
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
-import com.example.movieapp.core.database.model.detailmovie.CrewEntity
+import com.example.movieapp.core.database.model.detailMovie.CastEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CrewEntity
 import com.example.movieapp.core.domain.CastModel
 import com.example.movieapp.core.domain.CreditsModel
 import com.example.movieapp.core.domain.CrewModel

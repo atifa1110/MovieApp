@@ -1,8 +1,8 @@
 package com.example.movieapp.core.data
 
-import com.example.movieapp.core.database.model.detailmovie.CastEntity
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
-import com.example.movieapp.core.database.model.detailmovie.CrewEntity
+import com.example.movieapp.core.database.model.detailMovie.CastEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CrewEntity
 import com.example.movieapp.core.network.asImageURL
 import com.example.movieapp.core.network.response.movies.NetworkCast
 import com.example.movieapp.core.network.response.movies.NetworkCredits

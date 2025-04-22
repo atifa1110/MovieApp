@@ -1,7 +1,7 @@
 package com.example.movieapp.core.database.converter
 
 import androidx.room.TypeConverter
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
 import com.google.gson.Gson
 
 internal class CreditsConverter {

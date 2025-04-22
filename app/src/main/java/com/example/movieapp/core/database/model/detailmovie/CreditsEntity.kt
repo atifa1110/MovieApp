@@ -1,4 +1,4 @@
-package com.example.movieapp.core.database.model.detailmovie
+package com.example.movieapp.core.database.model.detailMovie
 
 data class CreditsEntity(
     val cast : List<CastEntity>,

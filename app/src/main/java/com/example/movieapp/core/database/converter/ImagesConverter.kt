@@ -1,7 +1,7 @@
 package com.example.movieapp.core.database.converter
 
 import androidx.room.TypeConverter
-import com.example.movieapp.core.database.model.detailmovie.ImagesEntity
+import com.example.movieapp.core.database.model.detailMovie.ImagesEntity
 import com.google.gson.Gson
 
 internal class ImagesConverter {

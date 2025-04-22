@@ -1,7 +1,7 @@
 package com.example.movieapp.core.data
 
-import com.example.movieapp.core.database.model.detailmovie.VideoEntity
-import com.example.movieapp.core.database.model.detailmovie.VideosEntity
+import com.example.movieapp.core.database.model.detailMovie.VideoEntity
+import com.example.movieapp.core.database.model.detailMovie.VideosEntity
 import com.example.movieapp.core.domain.VideoModel
 import com.example.movieapp.core.domain.VideosModel
 import com.example.movieapp.core.network.response.movies.NetworkVideo

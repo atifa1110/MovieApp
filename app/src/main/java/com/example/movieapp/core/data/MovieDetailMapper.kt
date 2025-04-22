@@ -1,9 +1,9 @@
 package com.example.movieapp.core.data
 
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
-import com.example.movieapp.core.database.model.detailmovie.ImagesEntity
-import com.example.movieapp.core.database.model.detailmovie.MovieDetailsEntity
-import com.example.movieapp.core.database.model.detailmovie.VideosEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.ImagesEntity
+import com.example.movieapp.core.database.model.detailMovie.MovieDetailsEntity
+import com.example.movieapp.core.database.model.detailMovie.VideosEntity
 import com.example.movieapp.core.domain.MovieDetailModel
 import com.example.movieapp.core.network.asImageURL
 import com.example.movieapp.core.network.getFormatReleaseDate
