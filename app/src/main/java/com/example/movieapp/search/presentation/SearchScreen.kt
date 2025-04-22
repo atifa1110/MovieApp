@@ -66,7 +66,6 @@ fun SearchRoute(
         addToHistory = { movie -> viewModel.addSearchHistory(movie) },
         deleteFromHistory = { id -> viewModel.deleteSearchHistory(id) },
         onQueryChange = { query-> viewModel.onEvent(SearchEvent.ChangeQuery(query)) },
-        //onSelected = { category -> viewModel.onCategorySelected(category)},
         onSeeAllClick = onSeeAllClick,
         snackBarHostState = snackBarHostState
     )
@@ -84,7 +83,6 @@ fun SearchScreen(
     onQueryChange: (String) -> Unit,
     onSeeAllClick: (MediaType.Common) -> Unit,
     snackBarMessageShown: () -> Unit,
-    //onSelected: (String) -> Unit,
     snackBarHostState: SnackbarHostState
 ) {
 
@@ -101,7 +99,6 @@ fun SearchScreen(
             onTvShowClick = onTvShowClick,
             addToHistory = addToHistory,
             deleteFromHistory = deleteFromHistory,
-            //onSelected = onSelected,
             onSeeAllClick = onSeeAllClick,
             modifier = Modifier.padding(it)
         )
@@ -124,7 +121,6 @@ fun SearchContent(
     onTvShowClick: (Int) -> Unit,
     addToHistory: (Movie) -> Unit,
     deleteFromHistory: (Int) -> Unit,
-    //onSelected: (String) -> Unit,
     onSeeAllClick: (MediaType.Common) -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -148,10 +144,6 @@ fun SearchContent(
                     isTrendingMovie = uiState.trendingMovieUiState.isTrendingMovie,
                     tvShow = uiState.trendingTvUiState.trendingTv,
                     isTrendingTv = uiState.trendingTvUiState.isTrendingTv,
-                    genres =  uiState.genreUiState.genres,
-                    isGenre = uiState.genreUiState.isGenres,
-                    selectedGenre = uiState.genreUiState.selectedGenre,
-                    //onSelected = onSelected,
                     onSeeAllClick = onSeeAllClick,
                     deleteFromHistory = deleteFromHistory,
                     onMovieClick = onMovieClick,
@@ -171,9 +163,6 @@ private fun SuggestionsContent(
     tvShow : List<TvShow>,
     isTrendingMovie : Boolean,
     isTrendingTv: Boolean,
-    genres : List<String>,
-    isGenre : Boolean,
-    selectedGenre : String,
     onSeeAllClick: (MediaType.Common) -> Unit,
     onMovieClick: (Int) -> Unit,
     onTvShowClick: (Int) -> Unit,
@@ -257,7 +246,6 @@ fun SearchPreview(){
                deleteFromHistory = {},
                onQueryChange = {},
                snackBarMessageShown = {},
-               //onSelected = {},
                onSeeAllClick = {},
                snackBarHostState = snackBarHostState
            )
@@ -306,7 +294,6 @@ fun SearchRecommendedPreview(){
                 deleteFromHistory = {},
                 onQueryChange = {},
                 snackBarMessageShown = {},
-                //onSelected = {},
                 onSeeAllClick = {},
                 snackBarHostState = snackBarHostState
             )
