@@ -1,10 +1,10 @@
 package com.example.movieapp.database.source
 
 import com.example.movieapp.core.database.dao.movie.MovieDetailsDao
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
-import com.example.movieapp.core.database.model.detailmovie.ImagesEntity
-import com.example.movieapp.core.database.model.detailmovie.MovieDetailsEntity
-import com.example.movieapp.core.database.model.detailmovie.VideosEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.ImagesEntity
+import com.example.movieapp.core.database.model.detailMovie.MovieDetailsEntity
+import com.example.movieapp.core.database.model.detailMovie.VideosEntity
 import com.example.movieapp.core.database.source.MovieDetailsDatabaseSource
 import com.example.movieapp.core.database.util.DatabaseTransactionProvider
 import kotlinx.coroutines.flow.first

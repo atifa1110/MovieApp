@@ -1,10 +1,10 @@
 package com.example.movieapp.network.repository
 
 import app.cash.turbine.test
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
-import com.example.movieapp.core.database.model.detailmovie.ImagesEntity
-import com.example.movieapp.core.database.model.detailmovie.MovieDetailsEntity
-import com.example.movieapp.core.database.model.detailmovie.VideosEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.ImagesEntity
+import com.example.movieapp.core.database.model.detailMovie.MovieDetailsEntity
+import com.example.movieapp.core.database.model.detailMovie.VideosEntity
 import com.example.movieapp.core.database.source.MovieDetailsDatabaseSource
 import com.example.movieapp.core.database.source.WishlistDatabaseSource
 import com.example.movieapp.core.domain.CreditsModel
@@ -15,7 +15,6 @@ import com.example.movieapp.core.network.datasource.MovieNetworkDataSource
 import com.example.movieapp.core.network.repository.MovieDetailRepositoryImpl
 import com.example.movieapp.core.network.response.CinemaxResponse
 import com.example.movieapp.core.network.response.movies.MovieDetailNetwork
-import com.example.movieapp.database.resource.movieDetail
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
