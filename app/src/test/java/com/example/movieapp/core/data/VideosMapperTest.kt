@@ -1,13 +1,13 @@
 package com.example.movieapp.core.data
 
-import com.example.movieapp.core.database.model.detailmovie.VideoEntity
-import com.example.movieapp.core.database.model.detailmovie.VideosEntity
+import com.example.movieapp.core.database.model.detailMovie.VideoEntity
+import com.example.movieapp.core.database.model.detailMovie.VideosEntity
 import com.example.movieapp.core.network.response.movies.NetworkVideo
 import com.example.movieapp.core.network.response.movies.NetworkVideos
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class VideoMappingTest {
+class VideosMapperTest {
 
     @Test
     fun `test NetworkVideos to VideosEntity mapping`() {

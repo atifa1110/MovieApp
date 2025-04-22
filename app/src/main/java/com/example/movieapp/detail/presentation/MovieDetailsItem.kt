@@ -91,7 +91,6 @@ internal fun DetailsItem(
     snackBarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
     snackBarMessageShown : () -> Unit,
-    isPlaceholder: Boolean = false
 ) {
     Box(modifier.fillMaxSize()
         .background(Dark)

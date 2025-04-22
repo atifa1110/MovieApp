@@ -13,9 +13,6 @@ interface MovieDetailsDao {
     @Query("SELECT * FROM $MOVIE_DETAILS WHERE id = :id")
     fun getById(id: Int): Flow<MovieDetailsEntity?>
 
-//    @Query("SELECT * FROM $MOVIE_DETAILS WHERE id IN (:ids)")
-//    fun getByIds(ids: List<Int>): Flow<List<MovieDetailsEntity>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(movieDetails: MovieDetailsEntity)
 

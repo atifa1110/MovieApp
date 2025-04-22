@@ -5,7 +5,7 @@ import com.example.movieapp.core.model.TvShowDetails
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class TvShowDetailModelMapperTest {
+class TvShowDetailMapperTest {
 
     @Test
     fun `asTvShowDetails should correctly map TvShowDetailModel to TvShowDetails`() {

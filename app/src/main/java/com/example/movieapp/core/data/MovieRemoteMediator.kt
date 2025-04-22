@@ -103,8 +103,7 @@ class MovieRemoteMediator(
                 is CinemaxResponse.Loading -> {
                     MediatorResult.Success(endOfPaginationReached = false)
                 }
-                // 🔥 Tambahkan else untuk menangani semua kasus
-                else -> MediatorResult.Error(Exception("Unhandled response type: $response"))
+
             }
 
         } catch (exception: IOException) {

@@ -6,7 +6,7 @@ import com.example.movieapp.core.domain.MediaTypeModel
 import org.junit.Assert.*
 import org.junit.Test
 
-class MediaTypeTest {
+class MediaTypeMapperTest {
 
     @Test
     fun `Movie asNetworkMediaType returns correct mapping`() {

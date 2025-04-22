@@ -6,7 +6,7 @@ import com.example.movieapp.core.model.WishList
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class WishlistMapperTest {
+class WishListMapperTest {
 
     @Test
     fun `asWishlist correctly maps WishlistModel to WishList`() {

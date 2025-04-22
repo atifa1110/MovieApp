@@ -174,7 +174,6 @@ private fun SuggestionsContent(
     genres : List<String>,
     isGenre : Boolean,
     selectedGenre : String,
-    //onSelected: (String) -> Unit,
     onSeeAllClick: (MediaType.Common) -> Unit,
     onMovieClick: (Int) -> Unit,
     onTvShowClick: (Int) -> Unit,

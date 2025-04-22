@@ -34,11 +34,11 @@ class StorageRepositoryImpl @Inject constructor(
             fileRef.downloadUrl.addOnSuccessListener { uri ->
                 trySend(CinemaxResponse.Success(uri.toString())) // Emit sukses dengan URL gambar
                 close() // Tutup flow setelah berhasil
-            }.addOnFailureListener { e ->
+            }.addOnFailureListener {
                 trySend(CinemaxResponse.Failure("Failed to get download URL"))
                 close() // Tutup flow setelah gagal
             }
-        }.addOnFailureListener { e ->
+        }.addOnFailureListener {
             trySend(CinemaxResponse.Failure("Image upload failed"))
             close() // Tutup flow setelah gagal
         }

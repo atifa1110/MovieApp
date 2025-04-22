@@ -1,7 +1,7 @@
 package com.example.movieapp.database.source
 
 import com.example.movieapp.core.database.dao.tv.TvShowDetailsDao
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
 import com.example.movieapp.core.database.model.tv.TvShowDetailsEntity
 import com.example.movieapp.core.database.source.TvShowDetailsDatabaseSource
 import com.example.movieapp.core.database.util.DatabaseTransactionProvider

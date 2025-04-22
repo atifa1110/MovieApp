@@ -58,7 +58,7 @@ class TvShowRemoteMediator(
                 is CinemaxResponse.Success -> {
                     coroutineScope {
                         val tv = response.value.results.map { it.asTvShowEntity(mediaType, 0) }
-                        val endOfPaginationReached = tv.isEmpty() ?: false
+                        val endOfPaginationReached = tv.isEmpty()
 
                         val prevPage = if (currentPage == 1) null else currentPage - 1
                         val nextPage = if (endOfPaginationReached) null else currentPage + 1
@@ -74,8 +74,8 @@ class TvShowRemoteMediator(
 
                         databaseDataSource.handlePaging(
                             mediaType = mediaType,
-                            movies = tv ?: emptyList(),
-                            remoteKeys = remoteKeys ?: emptyList(),
+                            movies = tv ,
+                            remoteKeys = remoteKeys,
                             shouldDeleteMoviesAndRemoteKeys = loadType == LoadType.REFRESH
                         )
 

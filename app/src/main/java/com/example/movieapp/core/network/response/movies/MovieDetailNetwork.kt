@@ -81,7 +81,7 @@ data class MovieDetailNetwork(
     val voteCount: Int?= null,
 
     @SerializedName(Constants.Fields.CREDITS)
-    val credits: NetworkCredits? ?= null,
+    val credits: NetworkCredits? = null,
 
     @SerializedName(Constants.Fields.IMAGES)
     val images: NetworkImages? = null,

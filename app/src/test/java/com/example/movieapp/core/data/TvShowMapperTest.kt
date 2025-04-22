@@ -5,7 +5,7 @@ import com.example.movieapp.core.network.response.tv.TvShowNetwork
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class TvShowMappingTest {
+class TvShowMapperTest {
 
     @Test
     fun `test TvShowNetwork to TvShowEntity without runtime`() {

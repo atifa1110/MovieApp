@@ -1,14 +1,13 @@
 package com.example.movieapp.core.data
 
-import com.example.movieapp.core.database.model.detailmovie.CreditsEntity
+import com.example.movieapp.core.database.model.detailMovie.CreditsEntity
 import com.example.movieapp.core.database.model.tv.TvShowDetailsEntity
 import com.example.movieapp.core.network.getFormatReleaseDate
 import com.example.movieapp.core.network.response.tv.TvShowDetailNetwork
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class TvShowDetailMappingTest {
+class TvShowDetailMapperTest {
 
     @Test
     fun `TvShowDetailNetwork maps correctly to TvShowDetailsEntity`() {

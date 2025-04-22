@@ -108,7 +108,6 @@ private fun DetailsItemTvShow(
     snackBarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
     snackBarMessageShown : () -> Unit,
-    isPlaceholder: Boolean = false
 ) {
     Box(
         modifier

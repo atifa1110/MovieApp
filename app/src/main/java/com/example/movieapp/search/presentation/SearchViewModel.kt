@@ -94,7 +94,6 @@ class SearchViewModel @Inject constructor(
             SearchEvent.Refresh -> onRefresh()
             SearchEvent.Retry -> onRetry()
             SearchEvent.ClearError -> onClearError()
-            else -> {}
         }
     }
 

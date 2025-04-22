@@ -1,8 +1,8 @@
 package com.example.movieapp.database.converter
 
 import com.example.movieapp.core.database.converter.VideosConverter
-import com.example.movieapp.core.database.model.detailmovie.VideoEntity
-import com.example.movieapp.core.database.model.detailmovie.VideosEntity
+import com.example.movieapp.core.database.model.detailMovie.VideoEntity
+import com.example.movieapp.core.database.model.detailMovie.VideosEntity
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

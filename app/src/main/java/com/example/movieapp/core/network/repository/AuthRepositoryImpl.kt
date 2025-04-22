@@ -197,7 +197,7 @@ class AuthRepositoryImpl @Inject constructor(
         send(CinemaxResponse.Loading)
 
         val userUid = authNetworkDataSource.getUserUid()?.uid ?: ""
-        val task = authNetworkDataSource.saveProfile(userUid, user).addOnSuccessListener { task->
+        val task = authNetworkDataSource.saveProfile(userUid, user).addOnSuccessListener {
             authNetworkDataSource.updateData(user.name,user.photo)
             trySend(CinemaxResponse.Success("Data is Save"))
             close()
