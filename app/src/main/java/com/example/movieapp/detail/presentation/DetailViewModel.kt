@@ -37,7 +37,6 @@ data class DetailsUiState(
     val userMessage: Int? = null,
     val errorMessage: String? = null,
     val isOfflineModeAvailable: Boolean = false,
-    val isWishListed : Boolean = false,
 )
 
 @HiltViewModel

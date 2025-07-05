@@ -51,7 +51,7 @@ fun MainScreen(
             BottomNavHost(
                 navController = navController,
                 startDestination = startDestination,
-                onNavigateToDestination = { destination, route -> navController.navigate(route?:destination.route) },
+                onNavigateToDestination = { destination, route -> navController.navigate(route) },
                 onBackClick = { navController.popBackStack() },
                 onNavigateToAuth = onNavigateToAuth,
                 onNavigateToDetail = onNavigateToDetail,
